@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -69,8 +69,8 @@
 		060782A5250CE27700A87020 = {
 			isa = PBXGroup;
 			children = (
-				50430D7626013B310092DC6F /* TabBarViewController.swift */,
 				060782BA250CE27A00A87020 /* Assets.xcassets */,
+				50336DA5260392EA00517DDC /* Login */,
 				E2AAF96725BDA5F200A30723 /* Photo */,
 				E24BCFEC25B8399A006F7711 /* Post */,
 				E25558242590E9D4007CDBFF /* Profile */,
@@ -92,6 +92,7 @@
 		060782B0250CE27700A87020 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				50430D7626013B310092DC6F /* TabBarViewController.swift */,
 				060782B1250CE27700A87020 /* AppDelegate.swift */,
 				060782B3250CE27700A87020 /* SceneDelegate.swift */,
 				060782B5250CE27700A87020 /* FeedViewController.swift */,
@@ -110,13 +111,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		50336DA5260392EA00517DDC /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				E25052AC25B33F4700201617 /* LogInViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
 		80E69A97276420D387B01AB9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				B11811169888747107DDA3F2 /* Pods-Navigation.debug.xcconfig */,
 				54B96D5774A4F3DE4ADFC0C4 /* Pods-Navigation.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -134,7 +142,6 @@
 			isa = PBXGroup;
 			children = (
 				E25558282590EA54007CDBFF /* ProfileViewController.swift */,
-				E25052AC25B33F4700201617 /* LogInViewController.swift */,
 				E27CC2DB25B9EFBF008C4C11 /* ProfileHeaderView.swift */,
 			);
 			path = Profile;

@@ -7,10 +7,50 @@
 //
 
 import UIKit
+import SnapKit
 
-final class FeedViewController: UIViewController {
+protocol FeedViewOutput {
+    func showPost()
+    var navigationController: UINavigationController? { get set }
+    var postName: Post? { get set }
+}
+
+class FeedViewController: UIViewController {
     
     let post: Post = Post(title: "Пост", author: nil, description: nil, imageName: nil, likes: nil, views: nil)
+    
+    var output: FeedViewOutput?
+    
+    lazy var containerView: UIView = {
+        let container = ContainerView()
+        container.onTap = output?.showPost
+        return container
+    }()
+    
+    func setupConstraints() {
+        containerView.snp.makeConstraints() { make in
+            make.top.leading.bottom.trailing.equalToSuperview()
+        }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .systemGreen
+        output = PostPresenter()
+        output?.navigationController = navigationController
+        output?.postName = post
+        view.addSubview(containerView)
+        setupConstraints()
+        print(type(of: self), #function)
+        
+    }
+
+}
+
+//MARK: ContainerView
+class ContainerView: UIView {
+    
+    var onTap: (() -> Void)?
     
     let newButton: UIButton = {
         let button = UIButton(type: .system)
@@ -32,12 +72,6 @@ final class FeedViewController: UIViewController {
         return button
     }()
     
-    @objc private func navigationTo() {
-        let postViewController = PostViewController()
-        postViewController.post = post
-        navigationController?.pushViewController(postViewController, animated: true)
-    }
-    
     lazy var buttonsStack: UIStackView = {
         let buttonsStack = UIStackView()
         buttonsStack.addArrangedSubview(newButton)
@@ -52,48 +86,39 @@ final class FeedViewController: UIViewController {
         return buttonsStack
     }()
     
-    lazy var constraints = [
-        buttonsStack.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
-        buttonsStack.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
-        buttonsStack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+    lazy var newConstraints = [
+        buttonsStack.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 16),
+        buttonsStack.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16),
+        buttonsStack.centerYAnchor.constraint(equalTo: self.centerYAnchor)
     ]
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemGreen
-        print(type(of: self), #function)
-        view.addSubview(buttonsStack)
-        NSLayoutConstraint.activate(constraints)
+    @objc private func navigationTo() {
+        guard onTap != nil else { return }
+        onTap!()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        print(type(of: self), #function)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.addSubview(buttonsStack)
+        NSLayoutConstraint.activate(newConstraints)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        print(type(of: self), #function)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        print(type(of: self), #function)
+}
+
+//MARK: PostPresenter
+class PostPresenter: FeedViewOutput {
+    
+    func showPost() {
+        let postViewController = PostViewController()
+        postViewController.post = postName
+        navigationController?.pushViewController(postViewController, animated: true)
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        print(type(of: self), #function)
-    }
-    
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        print(type(of: self), #function)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        print(type(of: self), #function)
-    }
+    var navigationController: UINavigationController?
+    var postName: Post?
 }
 

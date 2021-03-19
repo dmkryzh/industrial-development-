@@ -7,9 +7,14 @@
 
 import UIKit
 
+protocol LogInViewControllerDelegate: class {
+    func validateLogin(_: String) -> Bool
+    func validatePassword(_: String) -> Bool
+}
+
 class LogInViewController: UIViewController {
     
-    // MARK: Properties
+    var delegate: LogInViewControllerDelegate?
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -126,9 +131,25 @@ class LogInViewController: UIViewController {
         logInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16)
     ]
     
+    //MARK: Functions
+    
     @objc func navigateTo() {
-        let profileViewController = ProfileViewController()
-        self.show(profileViewController, sender: nil)
+        if loginCheck() {
+            let profileViewController = ProfileViewController()
+            self.show(profileViewController, sender: nil)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "Wrong login or\\and password", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(action)
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func loginCheck() -> Bool {
+        guard delegate != nil else { return false}
+        guard delegate!.validateLogin(self.login.text ?? "") &&
+                delegate!.validatePassword(self.password.text ?? "") else { return true }
+        return false
     }
     
     
@@ -141,6 +162,7 @@ class LogInViewController: UIViewController {
         scrollView.addSubviews(containerView)
         containerView.addSubviews(logo, stackLogPas, logInButton)
         NSLayoutConstraint.activate(constraints)
+        delegate = LoginValidator()
     }
     
     // MARK: Keyboard observers
@@ -208,4 +230,23 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return newImage!
     }
+}
+
+class LoginValidator: LogInViewControllerDelegate {
+    
+    func validateLogin(_ login: String) -> Bool {
+        guard login == Checker.shared.login else { return true}
+        return false
+    }
+    
+    func validatePassword(_ password: String) -> Bool {
+        guard password == Checker.shared.password else { return true}
+        return false
+    }
+}
+
+class Checker {
+    static let shared = Checker()
+    let login = "777"
+    let password = "qwerty"
 }
