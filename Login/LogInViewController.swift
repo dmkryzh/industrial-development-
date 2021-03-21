@@ -6,27 +6,30 @@
 //
 
 import UIKit
+import SnapKit
+
+protocol LogInViewControllerDelegate: class {
+    func validateLogin(_: String) -> Bool
+    func validatePassword(_: String) -> Bool
+}
 
 class LogInViewController: UIViewController {
     
-    // MARK: Properties
+    var delegate: LogInViewControllerDelegate?
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.toAutoLayout()
         return scrollView
     }()
     
     let containerView: UIView = {
         let containerView = UIView()
-        containerView.toAutoLayout()
         return containerView
     }()
     
     let login: UITextField = {
         let login = UITextField()
         login.textColor = .black
-        //login.toAutoLayout()
         login.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         login.autocapitalizationType = .none
         login.tintColor = UIColor.init(named: "accentColor")
@@ -45,7 +48,6 @@ class LogInViewController: UIViewController {
         password.textColor = .black
         password.isSecureTextEntry = true
         password.autocapitalizationType = .none
-        //password.toAutoLayout()
         password.addInternalPaddings(left: 10, right: 10)
         password.placeholder = "Password"
         return password
@@ -56,7 +58,6 @@ class LogInViewController: UIViewController {
         logo.image = UIImage(named: "logo")
         logo.clipsToBounds = true
         logo.backgroundColor = .white
-        logo.toAutoLayout()
         return logo
     }()
     
@@ -74,7 +75,6 @@ class LogInViewController: UIViewController {
         button.setTitleColor(.darkGray, for: .highlighted)
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector (navigateTo), for: .touchUpInside)
-        button.toAutoLayout()
         return button
     }()
     
@@ -91,44 +91,60 @@ class LogInViewController: UIViewController {
         stackLogPas.layer.masksToBounds = true
         stackLogPas.backgroundColor = .systemGray6
         stackLogPas.spacing = 0
-        stackLogPas.toAutoLayout()
         return stackLogPas
     }()
     
     // MARK: Constraints
     
-    lazy var constraints = [
-        scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-        scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-        scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-        scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+    func setupConstraints() {
+        scrollView.snp.makeConstraints() { make in
+            make.top.leading.bottom.trailing.equalToSuperview()
+        }
         
-        containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-        containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-        containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-        containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-        containerView.widthAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.widthAnchor),
-        containerView.heightAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.heightAnchor),
+        containerView.snp.makeConstraints() { make in
+            make.top.leading.bottom.trailing.centerX.centerY.equalToSuperview()
+        }
         
-        logo.topAnchor.constraint(equalTo: containerView.safeAreaLayoutGuide.topAnchor, constant: 120),
-        logo.widthAnchor.constraint(equalToConstant: 100),
-        logo.heightAnchor.constraint(equalToConstant: 100),
-        logo.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+        logo.snp.makeConstraints() { make in
+            make.top.equalTo(containerView.snp.top).offset(120)
+            make.height.width.equalTo(100)
+            make.centerX.equalTo(containerView.snp.centerX)
+        }
         
-        stackLogPas.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 120),
-        stackLogPas.heightAnchor.constraint(equalToConstant: 100),
-        stackLogPas.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-        stackLogPas.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+        stackLogPas.snp.makeConstraints() { make in
+            make.top.equalTo(logo.snp.bottom).offset(120)
+            make.height.equalTo(100)
+            make.leading.equalTo(containerView.snp.leading).offset(16)
+            make.trailing.equalTo(containerView.snp.trailing).inset(16)
+        }
         
-        logInButton.topAnchor.constraint(equalTo: stackLogPas.bottomAnchor, constant: 16),
-        logInButton.heightAnchor.constraint(equalToConstant: 50),
-        logInButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-        logInButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16)
-    ]
+        logInButton.snp.makeConstraints() { make in
+            make.top.equalTo(stackLogPas.snp.bottom).offset(16)
+            make.height.equalTo(50)
+            make.leading.equalTo(containerView.snp.leading).offset(16)
+            make.trailing.equalTo(containerView.snp.trailing).inset(16)
+        }
+    }
+    
+    //MARK: Functions
     
     @objc func navigateTo() {
-        let profileViewController = ProfileViewController()
-        self.show(profileViewController, sender: nil)
+        if loginCheck() {
+            let profileViewController = ProfileViewController()
+            show(profileViewController, sender: nil)
+        } else {
+            let alert = UIAlertController(title: "Error", message: "Wrong login or\\and password", preferredStyle: .alert)
+            let action = UIAlertAction(title: "OK", style: .default)
+            alert.addAction(action)
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func loginCheck() -> Bool {
+        guard delegate != nil else { return false}
+        guard delegate!.validateLogin(self.login.text ?? "") &&
+                delegate!.validatePassword(self.password.text ?? "") else { return true }
+        return false
     }
     
     
@@ -140,7 +156,8 @@ class LogInViewController: UIViewController {
         view.addSubviews(scrollView)
         scrollView.addSubviews(containerView)
         containerView.addSubviews(logo, stackLogPas, logInButton)
-        NSLayoutConstraint.activate(constraints)
+        setupConstraints()
+        delegate = LoginValidator()
     }
     
     // MARK: Keyboard observers
@@ -208,4 +225,24 @@ extension UIImage {
         UIGraphicsEndImageContext()
         return newImage!
     }
+}
+
+class LoginValidator: LogInViewControllerDelegate {
+    
+    func validateLogin(_ login: String) -> Bool {
+        guard login == Checker.shared.login else { return true}
+        return false
+    }
+    
+    func validatePassword(_ password: String) -> Bool {
+        guard password == Checker.shared.password else { return true}
+        return false
+    }
+}
+
+class Checker {
+    static let shared = Checker()
+    let login = "777"
+    let password = "qwerty"
+    private init() {}
 }

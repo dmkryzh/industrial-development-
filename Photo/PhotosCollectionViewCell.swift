@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class PhotosCollectionViewCell: UICollectionViewCell {
     
@@ -20,7 +21,6 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         photo.image = nil
         photo.contentMode = .scaleAspectFill
         photo.clipsToBounds = true
-        photo.toAutoLayout()
         return photo
     }()
     

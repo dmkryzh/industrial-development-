@@ -92,14 +92,6 @@ class ProfileViewController: UIViewController {
         
     }
     
-//    lazy var constraints = [
-//        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-//        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-//        tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-//        tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-//
-//    ]
-    
     func setupConstraints() {
         tableView.snp.makeConstraints() { make in
             make.top.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
@@ -114,7 +106,6 @@ class ProfileViewController: UIViewController {
         view.addSubviews(tableView, ava, cross)
         self.cross.addGestureRecognizer(avaGesture)
         setupConstraints()
-        //NSLayoutConstraint.activate(constraints)
         center = self.ava.center
         
     }
