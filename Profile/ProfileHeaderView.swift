@@ -23,7 +23,6 @@ class ProfileHeaderView: UIView {
         avaView.image = UIImage(named: "1ava")
         avaView.contentMode = .scaleAspectFill
         avaView.layer.borderColor = UIColor.white.cgColor
-        avaView.toAutoLayout()
         return avaView
     }()
     
@@ -32,7 +31,6 @@ class ProfileHeaderView: UIView {
         statusLabel.text = statusText
         statusLabel.textColor = .gray
         statusLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        statusLabel.toAutoLayout()
         return statusLabel
     }()
     
@@ -41,7 +39,6 @@ class ProfileHeaderView: UIView {
         nameLabel.text = name
         nameLabel.textColor = .black
         nameLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        nameLabel.toAutoLayout()
         return nameLabel
     }()
     
@@ -54,7 +51,6 @@ class ProfileHeaderView: UIView {
         statusTextField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         statusTextField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
         statusTextField.addInternalPaddings(left: 10, right: 10)
-        statusTextField.toAutoLayout()
         return statusTextField
     }()
     
@@ -68,7 +64,6 @@ class ProfileHeaderView: UIView {
         statusButton.layer.shadowOpacity = 0.7
         statusButton.layer.shadowColor = UIColor.black.cgColor
         statusButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        statusButton.toAutoLayout()
         return statusButton
     }()
 

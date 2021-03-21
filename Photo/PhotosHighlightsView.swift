@@ -15,14 +15,12 @@ class PhotosHighlightsView: UIView {
         title.text = "Photos"
         title.textColor = .black
         title.font = UIFont.systemFont(ofSize: 24, weight: .bold)
-        title.toAutoLayout()
         return title
     }()
     
     let arrow: UIImageView = {
         let arrowConfig = UIImage.SymbolConfiguration(textStyle: .title3)
         let arrow = UIImageView()
-        arrow.toAutoLayout()
         arrow.tintColor = .black
         arrow.image = UIImage(systemName: "arrow.forward", withConfiguration: arrowConfig)
         return arrow
@@ -43,7 +41,6 @@ class PhotosHighlightsView: UIView {
         viewStack.contentMode = .scaleAspectFill
         viewStack.axis = .horizontal
         viewStack.spacing = 8
-        viewStack.toAutoLayout()
         return viewStack
     }()
     

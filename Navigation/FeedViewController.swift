@@ -16,8 +16,6 @@ protocol FeedViewOutput {
 
 class FeedViewController: UIViewController {
     
-    let post: Post = Post(title: "Пост", author: nil, description: nil, imageName: nil, likes: nil, views: nil)
-    
     var output: FeedViewOutput?
     
     lazy var containerView: UIView = {
@@ -83,7 +81,6 @@ class ContainerView: UIView {
         buttonsStack.spacing = 0
         buttonsStack.layer.cornerRadius = 10
         buttonsStack.layer.masksToBounds = true
-        buttonsStack.toAutoLayout()
         return buttonsStack
     }()
     

@@ -19,20 +19,17 @@ class LogInViewController: UIViewController {
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.toAutoLayout()
         return scrollView
     }()
     
     let containerView: UIView = {
         let containerView = UIView()
-        containerView.toAutoLayout()
         return containerView
     }()
     
     let login: UITextField = {
         let login = UITextField()
         login.textColor = .black
-        //login.toAutoLayout()
         login.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         login.autocapitalizationType = .none
         login.tintColor = UIColor.init(named: "accentColor")
@@ -51,7 +48,6 @@ class LogInViewController: UIViewController {
         password.textColor = .black
         password.isSecureTextEntry = true
         password.autocapitalizationType = .none
-        //password.toAutoLayout()
         password.addInternalPaddings(left: 10, right: 10)
         password.placeholder = "Password"
         return password
@@ -62,7 +58,6 @@ class LogInViewController: UIViewController {
         logo.image = UIImage(named: "logo")
         logo.clipsToBounds = true
         logo.backgroundColor = .white
-        logo.toAutoLayout()
         return logo
     }()
     
@@ -80,7 +75,6 @@ class LogInViewController: UIViewController {
         button.setTitleColor(.darkGray, for: .highlighted)
         button.layer.masksToBounds = true
         button.addTarget(self, action: #selector (navigateTo), for: .touchUpInside)
-        button.toAutoLayout()
         return button
     }()
     
@@ -97,7 +91,6 @@ class LogInViewController: UIViewController {
         stackLogPas.layer.masksToBounds = true
         stackLogPas.backgroundColor = .systemGray6
         stackLogPas.spacing = 0
-        stackLogPas.toAutoLayout()
         return stackLogPas
     }()
     
