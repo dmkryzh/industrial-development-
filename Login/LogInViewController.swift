@@ -98,11 +98,12 @@ class LogInViewController: UIViewController {
     
     func setupConstraints() {
         scrollView.snp.makeConstraints() { make in
-            make.top.leading.bottom.trailing.equalToSuperview()
+            make.top.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
         }
         
         containerView.snp.makeConstraints() { make in
-            make.top.leading.bottom.trailing.centerX.centerY.equalToSuperview()
+            make.top.leading.bottom.trailing.equalTo(scrollView)
+            make.width.equalTo(view.safeAreaLayoutGuide.snp.width)
         }
         
         logo.snp.makeConstraints() { make in

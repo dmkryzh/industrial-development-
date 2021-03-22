@@ -26,7 +26,7 @@ class FeedViewController: UIViewController {
     
     func setupConstraints() {
         containerView.snp.makeConstraints() { make in
-            make.top.leading.bottom.trailing.equalToSuperview()
+            make.top.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
         }
     }
     
