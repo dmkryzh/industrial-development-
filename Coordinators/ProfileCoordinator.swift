@@ -11,16 +11,14 @@ import UIKit
 class ProfileCoordinator: Coordinator {
     
     var navController: UINavigationController?
-    var viewController: UIViewController
+    var rootViewController: UIViewController
 
     init() {
-
-        viewController = ProfileViewController()
-        viewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "person"), tag: 1)
-        navController = UINavigationController(rootViewController: viewController)
+        rootViewController = ProfileViewController()
+        rootViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(named: "person"), tag: 1)
+        navController = UINavigationController(rootViewController: rootViewController)
     }
     
-    func start() {
-    }
+    func start() {}
 
 }

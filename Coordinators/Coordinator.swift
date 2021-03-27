@@ -10,7 +10,7 @@ import UIKit
 
 protocol Coordinator: class {
     
-    var viewController: UIViewController { get }
+    var rootViewController: UIViewController { get }
     var navController: UINavigationController? { get }
     func start()
     

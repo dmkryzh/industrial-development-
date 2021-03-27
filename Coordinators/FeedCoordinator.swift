@@ -11,12 +11,12 @@ import UIKit
 class FeedCoordinator: Coordinator {
 
     var navController: UINavigationController?
-    var viewController: UIViewController
+    var rootViewController: UIViewController
 
     init() {
-        viewController = FeedViewController()
-        viewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(named: "house"), tag: 0)
-        navController = UINavigationController(rootViewController: viewController)
+        rootViewController = FeedViewController()
+        rootViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(named: "house"), tag: 0)
+        navController = UINavigationController(rootViewController: rootViewController)
     }
     
     func start() {

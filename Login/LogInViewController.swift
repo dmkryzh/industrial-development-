@@ -9,11 +9,15 @@ import UIKit
 import SnapKit
 
 protocol LogInViewControllerDelegate: class {
+    
     func validateLogin(_: String) -> Bool
     func validatePassword(_: String) -> Bool
+    
 }
 
 class LogInViewController: UIViewController {
+    
+    weak var coordinator: LoginCoordinator?
     
     var delegate: LogInViewControllerDelegate?
     
@@ -40,7 +44,13 @@ class LogInViewController: UIViewController {
         return login
     }()
     
-    let password: UITextField = {
+    let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.color = .black
+        return indicator
+    }()
+    
+    lazy var password: UITextField = {
         let password = UITextField()
         password.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         password.autocapitalizationType = .none
@@ -48,8 +58,11 @@ class LogInViewController: UIViewController {
         password.textColor = .black
         password.isSecureTextEntry = true
         password.autocapitalizationType = .none
-        password.addInternalPaddings(left: 10, right: 10)
+        password.addInternalPaddings(left: 10, right: 40)
         password.placeholder = "Password"
+        password.rightView?.addSubview(activityIndicator)
+        let rightView = password.rightView?.frame.size ?? CGSize.zero
+        activityIndicator.center = CGPoint(x: rightView.width / 2, y: rightView.height / 2)
         return password
     }()
     
@@ -78,6 +91,23 @@ class LogInViewController: UIViewController {
         return button
     }()
     
+    let hackPassword: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Подобрать пароль", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 10
+        button.setBackgroundImage(UIImage(named: "blue_pixel")?.alpha(1), for: .normal)
+        button.setBackgroundImage(UIImage(named: "blue_pixel")?.alpha(0.8), for: .selected)
+        button.setBackgroundImage(UIImage(named: "blue_pixel")?.alpha(0.8), for: .highlighted)
+        button.setBackgroundImage(UIImage(named: "blue_pixel")?.alpha(0.8), for: .disabled)
+        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.darkGray, for: .selected)
+        button.setTitleColor(.darkGray, for: .highlighted)
+        button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector (brut), for: .touchUpInside)
+        return button
+    }()
+    
     lazy var stackLogPas: UIStackView = {
         let stackLogPas = UIStackView()
         stackLogPas.addArrangedSubview(login)
@@ -93,6 +123,8 @@ class LogInViewController: UIViewController {
         stackLogPas.spacing = 0
         return stackLogPas
     }()
+    
+    
     
     // MARK: Constraints
     
@@ -125,14 +157,45 @@ class LogInViewController: UIViewController {
             make.leading.equalTo(containerView.snp.leading).offset(16)
             make.trailing.equalTo(containerView.snp.trailing).inset(16)
         }
+        
+        hackPassword.snp.makeConstraints() { make in
+            make.top.equalTo(logInButton.snp.bottom).offset(16)
+            make.height.equalTo(50)
+            make.leading.equalTo(containerView.snp.leading).offset(16)
+            make.trailing.equalTo(containerView.snp.trailing).inset(16)
+        }
     }
+    
+    let dispatchGroup = DispatchGroup()
+    
+    let dispatchQueueBacground = DispatchQueue(label: "bacground", qos: .background, attributes: .concurrent)
     
     //MARK: Functions
     
+    @objc func brut() {
+        
+        var hackedValue: String?
+        
+        self.activityIndicator.startAnimating()
+        
+        dispatchGroup.enter()
+        dispatchQueueBacground.async {
+            let brut = BrutForce()
+            hackedValue = brut.brutForce(Checker.shared.password)
+            self.dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.password.text = hackedValue
+            self.password.isSecureTextEntry = false
+            self.activityIndicator.stopAnimating()
+        }
+        
+    }
+    
     @objc func navigateTo() {
         if loginCheck() {
-            let profileViewController = ProfileViewController()
-            show(profileViewController, sender: nil)
+            coordinator?.startFeed()
         } else {
             let alert = UIAlertController(title: "Error", message: "Wrong login or\\and password", preferredStyle: .alert)
             let action = UIAlertAction(title: "OK", style: .default)
@@ -143,9 +206,9 @@ class LogInViewController: UIViewController {
     
     func loginCheck() -> Bool {
         guard delegate != nil else { return false}
-        guard delegate!.validateLogin(self.login.text ?? "") &&
-                delegate!.validatePassword(self.password.text ?? "") else { return true }
-        return false
+        guard delegate!.validateLogin(self.login.text ?? ""),
+                delegate!.validatePassword(self.password.text ?? "") else { return false }
+        return true
     }
     
     
@@ -156,9 +219,10 @@ class LogInViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubviews(scrollView)
         scrollView.addSubviews(containerView)
-        containerView.addSubviews(logo, stackLogPas, logInButton)
+        containerView.addSubviews(logo, stackLogPas, logInButton, hackPassword)
         setupConstraints()
         delegate = LoginValidator()
+        print("пароль: \(Checker.shared.password)")
     }
     
     // MARK: Keyboard observers
@@ -196,6 +260,7 @@ class LogInViewController: UIViewController {
         scrollView.contentInset.bottom = .zero
         scrollView.verticalScrollIndicatorInsets = .zero
     }
+    
 }
 
 // MARK: Extensions
@@ -231,19 +296,25 @@ extension UIImage {
 class LoginValidator: LogInViewControllerDelegate {
     
     func validateLogin(_ login: String) -> Bool {
-        guard login == Checker.shared.login else { return true}
-        return false
+        guard login == Checker.shared.login else { return false}
+        return true
     }
     
     func validatePassword(_ password: String) -> Bool {
-        guard password == Checker.shared.password else { return true}
-        return false
+        guard password == Checker.shared.password else { return false}
+        return true
     }
 }
 
 class Checker {
+    
     static let shared = Checker()
-    let login = "777"
-    let password = "qwerty"
+    var login = "777"
+    lazy var password: String = {
+        let chars = "abcdefghijklmnopqrstuvwxyz"
+        return String((0..<4).map{ _ in chars.randomElement()! })
+    }()
     private init() {}
 }
+
+

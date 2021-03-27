@@ -22,6 +22,7 @@
 		505EDD4626092C0100319C7A /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505EDD4526092C0100319C7A /* ProfileCoordinator.swift */; };
 		505EDD4D260A834B00319C7A /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505EDD4C260A834B00319C7A /* ProfileViewModel.swift */; };
 		505EDD56260E48BA00319C7A /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505EDD55260E48BA00319C7A /* LoginCoordinator.swift */; };
+		505EDD59260E78C400319C7A /* BrutForce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505EDD58260E78C400319C7A /* BrutForce.swift */; };
 		96A4A83F6B80C59A83237DDA /* Pods_Navigation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 71452D49513A071150B40130 /* Pods_Navigation.framework */; };
 		E225171A25BDEC3200936CA5 /* PhotosHighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E225171925BDEC3200936CA5 /* PhotosHighlightsView.swift */; };
 		E24BCFEA25B77B08006F7711 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24BCFE925B77B08006F7711 /* PostTableViewCell.swift */; };
@@ -52,6 +53,7 @@
 		505EDD4526092C0100319C7A /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		505EDD4C260A834B00319C7A /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		505EDD55260E48BA00319C7A /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		505EDD58260E78C400319C7A /* BrutForce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrutForce.swift; sourceTree = "<group>"; };
 		54B96D5774A4F3DE4ADFC0C4 /* Pods-Navigation.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Navigation.release.xcconfig"; path = "Target Support Files/Pods-Navigation/Pods-Navigation.release.xcconfig"; sourceTree = "<group>"; };
 		71452D49513A071150B40130 /* Pods_Navigation.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Navigation.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B11811169888747107DDA3F2 /* Pods-Navigation.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Navigation.debug.xcconfig"; path = "Target Support Files/Pods-Navigation/Pods-Navigation.debug.xcconfig"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			isa = PBXGroup;
 			children = (
 				E25052AC25B33F4700201617 /* LogInViewController.swift */,
+				505EDD58260E78C400319C7A /* BrutForce.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -312,6 +315,7 @@
 				060782CA250CEE7200A87020 /* Post.swift in Sources */,
 				505EDD3D26091DAC00319C7A /* Coordinator.swift in Sources */,
 				060782B4250CE27700A87020 /* SceneDelegate.swift in Sources */,
+				505EDD59260E78C400319C7A /* BrutForce.swift in Sources */,
 				E2AAF96925BDA62F00A30723 /* PhotosTableViewCell.swift in Sources */,
 				E24BCFEA25B77B08006F7711 /* PostTableViewCell.swift in Sources */,
 				E2AAF97025BDA77F00A30723 /* PhotosCollectionViewCell.swift in Sources */,

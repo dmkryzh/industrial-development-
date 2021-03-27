@@ -10,6 +10,8 @@ import SnapKit
 
 class ProfileViewController: UIViewController {
     
+    weak var coordinator: Coordinator?
+    
     var someState = false
     
     var center: CGPoint?
