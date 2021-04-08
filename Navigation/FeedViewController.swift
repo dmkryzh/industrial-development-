@@ -53,7 +53,6 @@ class ContainerView: UIView {
     
     let newButton: UIButton = {
         let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("button1", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
@@ -63,7 +62,6 @@ class ContainerView: UIView {
     
     let secondNewButton: UIButton = {
         let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("button2", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemRed

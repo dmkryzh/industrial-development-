@@ -10,6 +10,13 @@ import SnapKit
 
 class PhotosViewController: UIViewController {
     
+    class TestResult {
+        var property: String
+        init(property: String) {
+            self.property = property
+        }
+    }
+    
     var date = Date()
     
     var timer: Timer?
@@ -56,8 +63,26 @@ class PhotosViewController: UIViewController {
         
         timerLabel.text = times.joined(separator: " ")
     }
+
+    
+    func testResult(completion: (Result<TestResult, AppErrors>) -> Void) {
+        if let _ = self.timer {
+            completion(.success(TestResult(property: "Result OK")))
+        } else {
+            completion(.failure(AppErrors.internalError))
+        }
+    }
     
     func useTimer() {
+        
+        testResult() { result in
+            switch result {
+            case .success(let test):
+                print(test.property)
+            case .failure(let error):
+                print(error.rawValue)
+            }
+        }
         
         if timer == nil {
             date = Date()
