@@ -12,7 +12,7 @@ class ProfileViewController: UIViewController {
     
     weak var coordinator: Coordinator?
     
-    var someState = false
+    var someState = true
     
     var center: CGPoint?
     
@@ -31,6 +31,8 @@ class ProfileViewController: UIViewController {
         cross.alpha = 0
         cross.tintColor = .white
         cross.isUserInteractionEnabled = true
+        let crossGesture = UITapGestureRecognizer(target: self, action: #selector(crossTap))
+        cross.addGestureRecognizer(crossGesture)
         return cross
     }()
     
@@ -45,58 +47,111 @@ class ProfileViewController: UIViewController {
         tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: String(describing: PhotosTableViewCell.self))
         return tableView
     }()
+
+    //MARK: Анимация
     
-    lazy var ava: UIImageView = {
-        let avaView = UIImageView()
-        avaView.layer.cornerRadius = 50
-        avaView.clipsToBounds = true
-        avaView.layer.borderWidth = 3
-        avaView.image = UIImage(named: "1ava")
-        avaView.contentMode = .scaleAspectFill
-        avaView.layer.borderColor = UIColor.white.cgColor
-        avaView.isUserInteractionEnabled = true
-        avaView.alpha = 0
-        return avaView
-    }()
-    
-    lazy var avaGesture = UITapGestureRecognizer(target: self, action: #selector(avaTap))
-    
-    
-    //MARK: Обработка нажатия
+    func animateCross(_ state: Bool, _ completion: ((Bool)->Void)? = nil) {
+        if state {
+            UIView.animate(withDuration: 1.0, animations: {
+                self.cross.alpha = 1
+                self.view.bringSubviewToFront(self.cross)
+            },
+            completion: completion)
+            
+        } else {
+            UIView.animate(withDuration: 1.0, animations: {
+                self.cross.alpha = 0
+            },
+            completion: completion)
+        }
+    }
     
     @objc func avaTap() {
-        print("tap")
-        self.someState.toggle()
         
-        let animationIn = UIViewPropertyAnimator(duration: 1, curve: .easeInOut) {
+        let grayBackgroundViewHeader = self.tableView.headerView(forSection: 0)!.contentView.subviews[self.tableView.headerView(forSection: 0)!.contentView.subviews.count - 2]
+        
+        let avaPositionHeader = self.tableView.headerView(forSection: 0)!.contentView.subviews.last!
+        
+        guard someState else { return }
+        
+        func animateAvaToCenterProfile() {
+            grayBackgroundViewHeader.alpha = 0.5
             
-            if self.someState == true {
-                
-                self.ava.alpha = 1
-                self.header.avaView.alpha = 0
-                self.tableView.alpha = 0.5
-                self.cross.alpha = 1
-                self.viewWillLayoutSubviews()
+            avaPositionHeader.layer.cornerRadius = 0
+            
+            avaPositionHeader.snp.remakeConstraints() { make in
+                make.center.equalTo(self.view.safeAreaLayoutGuide.snp.center)
+                make.width.equalTo(self.view.safeAreaLayoutGuide.snp.width)
+                make.height.equalTo(self.view.safeAreaLayoutGuide.snp.width)
             }
             
-            else {
-                self.ava.alpha = 0
-                self.header.avaView.alpha = 1
-                self.tableView.alpha = 1
-                self.cross.alpha = 0
-                self.viewWillLayoutSubviews()
-                self.header.avaView.isHidden = false
-            }
-            
+            self.view.layoutIfNeeded()
+            self.view.addSubviews(grayBackgroundViewHeader, avaPositionHeader)
         }
         
-        animationIn.startAnimation()
+        UIView.animate(withDuration: 1.0, animations: animateAvaToCenterProfile) {
+            if $0 {
+                self.animateCross(true)
+            }
+        }
         
+        someState.toggle()
     }
+    
+    
+    @objc func crossTap() {
+        
+        guard someState == false else { return }
+        
+        let grayBackgroundProfile = self.view.subviews[self.view.subviews.count - 3]
+        
+        let avaPositionProfile = self.view.subviews[self.view.subviews.count - 2]
+        
+      
+        
+        func animateAvaToInitialSize() {
+            
+            avaPositionProfile.layer.cornerRadius = 50
+            grayBackgroundProfile.alpha = 0
+            
+            avaPositionProfile.snp.remakeConstraints() { make in
+                make.height.width.equalTo(100)
+                make.top.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.top).offset(16)
+                make.leading.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.leading).offset(16)
+            }
+            
+            self.view.layoutIfNeeded()
+            
+            self.tableView.headerView(forSection: 0)?.contentView.addSubviews(grayBackgroundProfile, avaPositionProfile)
+        }
+        
+        animateCross(false) {
+            if $0 {
+                UIView.animate(withDuration: 1.0, animations: animateAvaToInitialSize) {
+                    if $0 {
+                        avaPositionProfile.snp.remakeConstraints() { make in
+                            make.height.width.equalTo(100)
+                            make.top.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.top).offset(16)
+                            make.leading.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.leading).offset(16)
+                        }
+                        self.tableView.reloadData()
+                    }
+                }
+            }
+        }
+        someState.toggle()
+    }
+    
+    //MARK: Constraints
     
     func setupConstraints() {
         tableView.snp.makeConstraints() { make in
             make.top.leading.bottom.trailing.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        cross.snp.makeConstraints() { make in
+            make.top.trailing.equalToSuperview().inset(32)
+            make.height.width.equalTo(60)
         }
     }
     
@@ -105,38 +160,14 @@ class ProfileViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
-        view.addSubviews(tableView, ava, cross)
-        self.cross.addGestureRecognizer(avaGesture)
+        view.addSubviews(tableView, cross)
         setupConstraints()
-        center = self.ava.center
+        //center = self.ava.center
         
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        // если вью было нажато
-        if someState {
-            self.cross.frame = CGRect(x: self.ava.frame.maxX - 45, y: self.ava.frame.minY + 15, width: 30, height: 30)
-            // проверка, чтобы правильно отобразить аватарку при изменении ротации
-            if self.view.frame.height > self.view.frame.width {
-                
-                self.ava.frame.size = CGSize(width: self.view.safeAreaLayoutGuide.layoutFrame.width, height: self.view.safeAreaLayoutGuide.layoutFrame.width)
-                self.ava.center = self.view.center
-                self.ava.layer.cornerRadius = 0
-                
-            } else {
-                
-                self.ava.frame.size = CGSize(width: self.view.safeAreaLayoutGuide.layoutFrame.height , height: self.view.safeAreaLayoutGuide.layoutFrame.height)
-                self.ava.center = CGPoint(x: self.view.safeAreaLayoutGuide.layoutFrame.midX, y: self.view.safeAreaLayoutGuide.layoutFrame.midY)
-                self.ava.layer.cornerRadius = 0
-            }
-            
-        } else {
-            
-            self.ava.frame = CGRect(x:  self.view.safeAreaInsets.left + 16, y: self.view.safeAreaInsets.top + 16, width: 100, height: 100)
-            self.cross.frame = CGRect(x: self.ava.frame.maxX - 45, y: self.ava.frame.minY + 15, width: .zero, height: .zero)
-            self.ava.layer.cornerRadius = 50
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -178,13 +209,16 @@ extension ProfileViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return UITableView.automaticDimension
+        guard section == 0 else { return 0 }
+        return 200
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard section == 0 else { return nil }
         return self.header
     }
+    
+    
     
 }
 

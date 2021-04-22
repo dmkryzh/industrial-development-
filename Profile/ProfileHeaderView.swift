@@ -8,12 +8,14 @@
 import UIKit
 import SnapKit
 
-class ProfileHeaderView: UIView {
+class ProfileHeaderView: UITableViewHeaderFooterView {
     
     var someState = false
     
     private var statusText = "Waiting for something"
     private var name = "Default Name"
+    
+    let avaContainer = UIView()
     
     lazy var avaView: UIImageView = {
         let avaView = UIImageView()
@@ -66,9 +68,23 @@ class ProfileHeaderView: UIView {
         statusButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
         return statusButton
     }()
+    
+    lazy var secondaryView: UIView = {
+        let newView = UIView(frame: UIScreen.main.bounds)
+        newView.alpha = 0
+        newView.backgroundColor = .lightGray
+        return newView
+    }()
 
     //MARK: Constraints
     func setupConstraints() {
+        
+        avaContainer.snp.makeConstraints() { make in
+            make.height.width.equalTo(100)
+            make.top.equalTo(self.snp.top).offset(16)
+            make.leading.equalTo(self.snp.leading).offset(16)
+        }
+        
         avaView.snp.makeConstraints() { make in
             make.height.width.equalTo(100)
             make.top.equalTo(self.snp.top).offset(16)
@@ -78,27 +94,27 @@ class ProfileHeaderView: UIView {
         nameLabel.snp.makeConstraints() { make in
             make.height.equalTo(20)
             make.top.equalTo(self.snp.top).offset(27)
-            make.leading.equalTo(avaView.snp.trailing).offset(24)
+            make.leading.equalTo(avaContainer.snp.trailing).offset(24)
             make.trailing.equalTo(self.snp.trailing).inset(16)
         }
         
         statusLabel.snp.makeConstraints() { make in
             make.height.equalTo(20)
             make.top.equalTo(nameLabel.snp.top).offset(27)
-            make.leading.equalTo(avaView.snp.trailing).offset(24)
+            make.leading.equalTo(avaContainer.snp.trailing).offset(24)
             make.trailing.equalTo(self.snp.trailing).inset(16)
         }
         
         statusTextField.snp.makeConstraints() { make in
             make.height.equalTo(40)
-            make.top.equalTo(avaView.snp.bottom).inset(24)
-            make.leading.equalTo(avaView.snp.trailing).offset(24)
+            make.top.equalTo(avaContainer.snp.bottom).inset(24)
+            make.leading.equalTo(avaContainer.snp.trailing).offset(24)
             make.trailing.equalTo(self.snp.trailing).inset(16)
         }
         
         statusButton.snp.makeConstraints() { make in
             make.height.equalTo(50)
-            make.top.equalTo(avaView.snp.bottom).offset(50)
+            make.top.equalTo(avaContainer.snp.bottom).offset(50)
             make.leading.equalTo(self.snp.leading).offset(16)
             make.bottom.equalTo(self.snp.bottom).inset(16)
             make.trailing.equalTo(self.snp.trailing).inset(16)
@@ -117,11 +133,22 @@ class ProfileHeaderView: UIView {
     }
    
     //MARK: init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .lightGray
-        addSubviews(avaView, nameLabel, statusLabel, statusTextField, statusButton)
+//    override init(frame: CGRect) {
+//        backgroundColor = .lightGray
+//        addSubviews(avaContainer, avaView, nameLabel, statusLabel, statusTextField, statusButton)
+//        setupConstraints()
+//        super.init(frame: frame)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        contentView.addSubviews(avaContainer, nameLabel, statusLabel, statusTextField, statusButton, secondaryView, avaView)
         setupConstraints()
+      
     }
     
     required init?(coder: NSCoder) {
