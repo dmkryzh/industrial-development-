@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProfileHeaderView: UITableViewHeaderFooterView {
+class ProfileHeaderView: UIView {
     
     var someState = false
     
@@ -69,11 +69,11 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
         return statusButton
     }()
     
-    lazy var secondaryView: UIView = {
-        let newView = UIView(frame: UIScreen.main.bounds)
-        newView.alpha = 0
-        newView.backgroundColor = .lightGray
-        return newView
+    lazy var grayView: UIView = {
+        let grayView = UIView(frame: UIScreen.main.bounds)
+        grayView.alpha = 0
+        grayView.backgroundColor = .lightGray
+        return grayView
     }()
 
     //MARK: Constraints
@@ -133,23 +133,19 @@ class ProfileHeaderView: UITableViewHeaderFooterView {
     }
    
     //MARK: init
-//    override init(frame: CGRect) {
-//        backgroundColor = .lightGray
-//        addSubviews(avaContainer, avaView, nameLabel, statusLabel, statusTextField, statusButton)
-//        setupConstraints()
-//        super.init(frame: frame)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-    
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
-        contentView.addSubviews(avaContainer, nameLabel, statusLabel, statusTextField, statusButton, secondaryView, avaView)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        backgroundColor = .lightGray
+        addSubviews(avaContainer, avaView, nameLabel, statusLabel, statusTextField, statusButton, grayView, avaView)
         setupConstraints()
-      
     }
+    
+//    override init(reuseIdentifier: String?) {
+//        super.init(reuseIdentifier: reuseIdentifier)
+//        contentView.addSubviews(avaContainer, nameLabel, statusLabel, statusTextField, statusButton, secondaryView, avaView)
+//        setupConstraints()
+//
+//    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

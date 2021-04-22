@@ -47,7 +47,7 @@ class ProfileViewController: UIViewController {
         tableView.register(PhotosTableViewCell.self, forCellReuseIdentifier: String(describing: PhotosTableViewCell.self))
         return tableView
     }()
-
+    
     //MARK: Анимация
     
     func animateCross(_ state: Bool, _ completion: ((Bool)->Void)? = nil) {
@@ -68,25 +68,21 @@ class ProfileViewController: UIViewController {
     
     @objc func avaTap() {
         
-        let grayBackgroundViewHeader = self.tableView.headerView(forSection: 0)!.contentView.subviews[self.tableView.headerView(forSection: 0)!.contentView.subviews.count - 2]
-        
-        let avaPositionHeader = self.tableView.headerView(forSection: 0)!.contentView.subviews.last!
-        
         guard someState else { return }
         
         func animateAvaToCenterProfile() {
-            grayBackgroundViewHeader.alpha = 0.5
             
-            avaPositionHeader.layer.cornerRadius = 0
+            self.header.grayView.alpha = 0.5
             
-            avaPositionHeader.snp.remakeConstraints() { make in
+            self.header.avaView.layer.cornerRadius = 0
+            
+            self.header.avaView.snp.remakeConstraints() { make in
                 make.center.equalTo(self.view.safeAreaLayoutGuide.snp.center)
-                make.width.equalTo(self.view.safeAreaLayoutGuide.snp.width)
-                make.height.equalTo(self.view.safeAreaLayoutGuide.snp.width)
+                make.width.height.equalTo(self.view.safeAreaLayoutGuide.snp.width)
             }
             
             self.view.layoutIfNeeded()
-            self.view.addSubviews(grayBackgroundViewHeader, avaPositionHeader)
+            self.view.addSubviews(self.header.grayView, self.header.avaView)
         }
         
         UIView.animate(withDuration: 1.0, animations: animateAvaToCenterProfile) {
@@ -107,8 +103,6 @@ class ProfileViewController: UIViewController {
         
         let avaPositionProfile = self.view.subviews[self.view.subviews.count - 2]
         
-      
-        
         func animateAvaToInitialSize() {
             
             avaPositionProfile.layer.cornerRadius = 50
@@ -116,13 +110,11 @@ class ProfileViewController: UIViewController {
             
             avaPositionProfile.snp.remakeConstraints() { make in
                 make.height.width.equalTo(100)
-                make.top.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.top).offset(16)
-                make.leading.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.leading).offset(16)
+                make.center.equalTo(self.header.avaContainer.snp.center)
             }
             
             self.view.layoutIfNeeded()
-            
-            self.tableView.headerView(forSection: 0)?.contentView.addSubviews(grayBackgroundProfile, avaPositionProfile)
+            self.header.addSubviews(grayBackgroundProfile, avaPositionProfile)
         }
         
         animateCross(false) {
@@ -131,8 +123,7 @@ class ProfileViewController: UIViewController {
                     if $0 {
                         avaPositionProfile.snp.remakeConstraints() { make in
                             make.height.width.equalTo(100)
-                            make.top.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.top).offset(16)
-                            make.leading.equalTo(self.tableView.headerView(forSection: 0)!.contentView.snp.leading).offset(16)
+                            make.center.equalTo(self.header.avaContainer.snp.center)
                         }
                         self.tableView.reloadData()
                     }
@@ -150,7 +141,7 @@ class ProfileViewController: UIViewController {
         }
         
         cross.snp.makeConstraints() { make in
-            make.top.trailing.equalToSuperview().inset(32)
+            make.top.trailing.equalTo(self.view.safeAreaLayoutGuide).inset(16)
             make.height.width.equalTo(60)
         }
     }
@@ -206,11 +197,6 @@ extension ProfileViewController: UITableViewDelegate {
         let photosViewController = PhotosViewController()
         photosViewController.title = "Photo Gallery"
         navigationController?.pushViewController(photosViewController, animated: true)
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        guard section == 0 else { return 0 }
-        return 200
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
