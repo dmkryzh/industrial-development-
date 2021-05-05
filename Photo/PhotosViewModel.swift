@@ -10,38 +10,34 @@ import Foundation
 import UIKit
 
 protocol ViewModelViewDelegate {
-    func updateView()
-    
 }
 
 protocol ViewModelInputDelegate {
     func onTap()
 }
 
-class PhotosViewModel: NSObject {
+class PhotosViewModel: NSObject, ViewModelViewDelegate {
     
-    class TestResult {
+    private class TestResult {
         var property: String
         init(property: String) {
             self.property = property
         }
     }
     
-    var date = Date()
+    private(set) var date = Date()
     
-    var timer: Timer?
+    private(set) var timer: Timer?
     
-    var currentTime: String?
+    private(set) var photos: [Photo]
     
-    var photos: [Photo]
+    private(set) var numberOfSections: Int
     
-    var numberOfSections: Int
+    private(set) var numberOfItems: Int
     
-    var numberOfItems: Int
+    private(set) var collectionIdentifier: String
     
-    var collectionIdentifier: String
-    
-    func testResult(completion: (Result<TestResult, AppErrors>) -> Void) {
+    private func testResult(completion: (Result<TestResult, AppErrors>) -> Void) {
         if let _ = timer {
             completion(.success(TestResult(property: "Result OK")))
         } else {
