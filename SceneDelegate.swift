@@ -9,6 +9,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var appCoordinator: MainCoordinator?
+    let urls = ["https://swapi.dev/api/people/8",
+                "https://swapi.dev/api/starships/3",
+                "https://swapi.dev/api/planets/5"]
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -17,7 +20,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let startController = MainTabBarController()
         appCoordinator = MainCoordinator(rootViewController: startController)
         window?.rootViewController = appCoordinator?.rootViewController
+        let appConfiguration = AppConfiguration.optionTwo(URL(string: urls.randomElement()!)!)
+        NetworkService.appConf = appConfiguration.returnUrl()
+        
+//        NetworkService.dataTask(url: appConfiguration.returnUrl(), completion: { string in
+//            print(string!)
+//        })
         window?.makeKeyAndVisible()
+        
         appCoordinator?.start()
     }
 

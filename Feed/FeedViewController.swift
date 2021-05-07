@@ -130,6 +130,7 @@ class PostPresenter: FeedViewOutput {
     
     func showPost(_ post: Post) {
         let postViewController = PostViewController()
+        postViewController.url = NetworkService.appConf
         postViewController.post = post
         navigationController?.pushViewController(postViewController, animated: true)
     }

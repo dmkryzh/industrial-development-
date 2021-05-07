@@ -2,8 +2,6 @@
 //  Post.swift
 //  Navigation
 //
-//  Created by Artem Novichkov on 12.09.2020.
-//
 
 struct Post {
     
