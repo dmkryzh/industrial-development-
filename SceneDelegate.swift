@@ -22,12 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = appCoordinator?.rootViewController
         let appConfiguration = AppConfiguration.optionTwo(URL(string: urls.randomElement()!)!)
         NetworkService.appConf = appConfiguration.returnUrl()
-        
-//        NetworkService.dataTask(url: appConfiguration.returnUrl(), completion: { string in
-//            print(string!)
-//        })
         window?.makeKeyAndVisible()
-        
         appCoordinator?.start()
     }
 

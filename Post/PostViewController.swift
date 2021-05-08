@@ -18,24 +18,51 @@ class PostViewController: UIViewController {
         
         didSet {
             
-            NetworkService.dataTask(url: url!, completionData: { data in
+            NetworkService.dataTask(url: url!,
+            
+            completionData: { data in
                 DispatchQueue.main.async {
                     self.responseLabel.text = data
                 }
             },
-            completionResponse: { httpHeaders in
+            completionResponse: { httpHeaders, httpCode in
                 DispatchQueue.main.async {
                     self.htmlHeadersLabel.text = httpHeaders?.description
+                    self.statusCodeLabel.text = httpCode.description
                 }
             },
-            completionCode: { code in
+            completionError: { error in
                 DispatchQueue.main.async {
-                    self.statusCodeLabel.text = String(code!)
+                    self.responseLabel.text = error?.debugDescription
                 }
             })
         }
         
     }
+    
+    let statusHeader: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textAlignment = .left
+        label.text = "HTTP status:"
+        return label
+    }()
+    
+    let responseHeader: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textAlignment = .left
+        label.text = "HTTP response:"
+        return label
+    }()
+    
+    let headerHeader: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textAlignment = .left
+        label.text = "HTTP headers:"
+        return label
+    }()
     
     lazy var statusCodeLabel: UILabel = {
         let label = UILabel()
@@ -71,18 +98,34 @@ class PostViewController: UIViewController {
     }()
     
     lazy var constraintsSetup = { [self] in
-        statusCodeLabel.snp.makeConstraints() { make in
+        
+        statusHeader.snp.makeConstraints() { make in
             make.top.equalTo(view.safeAreaLayoutGuide).offset(10)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
-        htmlHeadersLabel.snp.makeConstraints() { make in
+        statusCodeLabel.snp.makeConstraints() { make in
+            make.top.equalTo(statusHeader.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
+        }
+        
+        headerHeader.snp.makeConstraints() { make in
             make.top.equalTo(statusCodeLabel.snp.bottom).offset(10)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
         
-        responseLabel.snp.makeConstraints() { make in
+        htmlHeadersLabel.snp.makeConstraints() { make in
+            make.top.equalTo(headerHeader.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
+        }
+        
+        responseHeader.snp.makeConstraints() { make in
             make.top.equalTo(htmlHeadersLabel.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
+        }
+        
+        responseLabel.snp.makeConstraints() { make in
+            make.top.equalTo(responseHeader.snp.bottom).offset(10)
             make.leading.trailing.equalTo(view.safeAreaLayoutGuide).inset(10)
         }
     }
@@ -99,7 +142,7 @@ class PostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .orange
-        view.addSubviews(statusCodeLabel, htmlHeadersLabel, responseLabel)
+        view.addSubviews(statusHeader, statusCodeLabel, headerHeader, htmlHeadersLabel, responseHeader, responseLabel)
         if let _ = try? optionalTry() {
             print("No issues")
         } else {

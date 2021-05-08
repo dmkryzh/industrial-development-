@@ -44,20 +44,18 @@ struct NetworkService {
     
     static func dataTask( url: URL,
                           completionData: @escaping (String?) -> Void,
-                          completionResponse: @escaping ([String:Any]?) -> Void,
-                          completionCode: @escaping (Int?) -> Void) {
+                          completionResponse: @escaping ([String:Any]?, Int) -> Void,
+                          completionError: @escaping (String?) -> Void) {
 
         let task = sharedSession.dataTask(with: url) { data, response, error in
             
             guard error == nil else {
-                print(error.debugDescription)
+                completionError(error.debugDescription)
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else { return }
-            completionResponse(httpResponse.allHeaderFields as? [String:Any])
-            completionCode(httpResponse.statusCode)
-            
+            completionResponse(httpResponse.allHeaderFields as? [String:Any], httpResponse.statusCode)
             
             if let data = data {
                 completionData(String(data: data, encoding: .utf8))
