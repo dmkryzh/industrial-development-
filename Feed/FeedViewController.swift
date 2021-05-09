@@ -7,7 +7,7 @@ import UIKit
 import SnapKit
 
 protocol FeedViewOutput {
-    func showPost(_:Post)
+    func showPost(post: Post, url: URL?, object: String?) -> Void
     func showPlayer()
     var navigationController: UINavigationController? { get set }
 }
@@ -20,7 +20,7 @@ class FeedViewController: UIViewController {
     
     lazy var containerView: UIView = {
         let container = ContainerView()
-        container.onTap = output?.showPost(_:)
+        container.onTap = output?.showPost(post:url:object:)
         container.testOnTap = output?.showPlayer
         return container
     }()
@@ -50,7 +50,7 @@ class ContainerView: UIView {
     
     let post: Post = Post(title: "Пост", author: nil, description: nil, imageName: nil, likes: nil, views: nil)
     
-    var onTap: ((Post) -> Void)?
+    var onTap: ((Post, URL?, String?) -> Void)?
     
     var testOnTap: (() -> Void)?
     
@@ -59,7 +59,7 @@ class ContainerView: UIView {
         button.setTitle("button1", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
-        button.addTarget(self, action: #selector(navigationTo), for: .touchUpInside)
+        button.addTarget(self, action: #selector(navigationToRandomUrl), for: .touchUpInside)
         return button
     }()
     
@@ -68,7 +68,16 @@ class ContainerView: UIView {
         button.setTitle("button2", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemRed
-        button.addTarget(self, action: #selector(navigationTo), for: .touchUpInside)
+        button.addTarget(self, action: #selector(navigationToUrl), for: .touchUpInside)
+        return button
+    }()
+    
+    let someNewButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("button2", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.backgroundColor = .systemYellow
+        button.addTarget(self, action: #selector(navigationToPlanetUrl), for: .touchUpInside)
         return button
     }()
     
@@ -82,10 +91,7 @@ class ContainerView: UIView {
     }()
     
     lazy var buttonsStack: UIStackView = {
-        let buttonsStack = UIStackView()
-        buttonsStack.addArrangedSubview(newButton)
-        buttonsStack.addArrangedSubview(secondNewButton)
-        buttonsStack.addArrangedSubview(thirdNewButton)
+        let buttonsStack = UIStackView(arrangedSubviews: [newButton, secondNewButton,someNewButton, thirdNewButton])
         buttonsStack.alignment = .fill
         buttonsStack.distribution = .fillEqually
         buttonsStack.axis = .vertical
@@ -103,9 +109,19 @@ class ContainerView: UIView {
         }
     }
     
-    @objc private func navigationTo() {
+    @objc private func navigationToRandomUrl() {
         guard onTap != nil else { return }
-        onTap!(post)
+        onTap!(post, NetworkService.appConf, nil)
+    }
+    
+    @objc private func navigationToUrl() {
+        guard onTap != nil else { return }
+        onTap!(post, URL(string: "https://jsonplaceholder.typicode.com/todos/1"), "simple")
+    }
+    
+    @objc private func navigationToPlanetUrl() {
+        guard onTap != nil else { return }
+        onTap!(post, URL(string: "https://swapi.dev/api/planets/1"), "planet")
     }
     
     @objc private func navigationToPlayer() {
@@ -128,9 +144,10 @@ class ContainerView: UIView {
 //MARK: PostPresenter
 class PostPresenter: FeedViewOutput {
     
-    func showPost(_ post: Post) {
+    func showPost(post: Post, url: URL?, object: String?) {
         let postViewController = PostViewController()
-        postViewController.url = NetworkService.appConf
+        postViewController.randomUrl = url
+        postViewController.object = object
         postViewController.post = post
         navigationController?.pushViewController(postViewController, animated: true)
     }
