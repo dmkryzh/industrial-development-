@@ -7,22 +7,18 @@
 
 import Foundation
 
-protocol CommonStructureForData {
-    
-}
-
-struct SampleStructure: CommonStructureForData {
+struct UserStructure {
     
     let userId: Int
     let id: Int
     let title: String
     let completed: Bool
     
-    init?(json: [String: Any]) {
-        guard let userId = json["userId"] as? Int,
-              let id = json["id"] as? Int,
-              let title = json["title"] as? String,
-              let completed = json["completed"] as? Bool
+    init?(json: [String: Any]?) {
+        guard let userId = json?["userId"] as? Int,
+              let id = json?["id"] as? Int,
+              let title = json?["title"] as? String,
+              let completed = json?["completed"] as? Bool
         else {
             return nil
         }
@@ -34,7 +30,7 @@ struct SampleStructure: CommonStructureForData {
     }
 }
 
-struct Planet: Codable, CommonStructureForData {
+struct Planet: Codable {
     
     var name: String
     var rotationPeriod: String
@@ -45,15 +41,14 @@ struct Planet: Codable, CommonStructureForData {
     var terrain: String
     var surfaceWater: String?
     var population: String
-    var residents: [URL]
-    var films: [URL]
+    var residents: [String]
+    var films: [String]
     var created: String
     var edited: String
     var url: URL
-    
 }
 
 struct Person: Codable {
-    var name: String
+    let name: String
 }
 

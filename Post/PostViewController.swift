@@ -15,12 +15,11 @@ class PostViewController: UIViewController {
         return decoder
     }()
     
-    lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        tableView.dataSource = self
-        return tableView
-    }()
+    var persons: [Person]? {
+        didSet {
+            tableViewNames.reloadData()
+        }
+    }
     
     var post: Post? {
         didSet {
@@ -28,10 +27,32 @@ class PostViewController: UIViewController {
         }
     }
     
-    var object: String?
+    var objectForShow: String?
     
-    var objectForTable: Int?
-    var someObjectForTable: Planet?
+    var objectForTable: Planet? {
+        didSet {
+            objectForTable?.residents.forEach() { resident in
+                NetworkService.dataTask(
+                    url: (URL(string: resident)!),
+                    
+                    completionData: { data in
+                        DispatchQueue.main.async { [self] in
+                            let person = try? decoder.decode(Person.self, from: data!)
+                            
+                            if self.persons != nil {
+                                self.persons?.append(person!)
+                            } else {
+                                self.persons = [person!]
+                            }
+                        }
+                    },
+                    
+                    completionResponse: nil,
+                    
+                    completionError: nil)
+            }
+        }
+    }
     
     var randomUrl: URL? {
         
@@ -40,27 +61,33 @@ class PostViewController: UIViewController {
             NetworkService.dataTask(url: randomUrl!,
                                     
                                     completionData: { [self] data in
+                                        
                                         DispatchQueue.main.async {
                                             
-                                            if object == "simple" {
-                                                let sample = SampleStructure(json: try! NetworkService.toObject(json: data!)!)!
-                                                formatedLabel.text = sample.title
-                                            } else if object == "planet" {
-                                                let planet = try! decoder.decode(Planet.self, from: data!)
-                                                someObjectForTable = planet
-                                                objectForTable = planet.residents.count
-                                                orbitalLabel.text = planet.orbitalPeriod
+                                            if objectForShow == "sample" {
+                                                let json = try? NetworkService.toObject(json: data!)
+                                                let user = UserStructure(json: json)
+                                                formatedLabel.text = user?.title
                                                 
+                                            } else if objectForShow == "planet" {
+                                                let planet = try? decoder.decode(Planet.self, from: data!)
+                                                objectForTable = planet
+                                                orbitalLabel.text = planet?.orbitalPeriod
                                             }
                                             responseLabel.text = String(data: data!, encoding: .utf8)
+                                            
                                         }
+                                        
                                     },
+                                    
                                     completionResponse: { httpHeaders, httpCode in
+                                        
                                         DispatchQueue.main.async {
                                             self.htmlHeadersLabel.text = httpHeaders?.description
                                             self.statusCodeLabel.text = httpCode.description
                                         }
                                     },
+                                    
                                     completionError: { error in
                                         DispatchQueue.main.async {
                                             self.responseLabel.text = error?.debugDescription
@@ -176,6 +203,16 @@ class PostViewController: UIViewController {
         return label
     }()
     
+    lazy var tableViewNames: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = .clear
+        return tableView
+    }()
+    
     lazy var constraintsSetup = { [self] in
         
         scrollView.snp.makeConstraints() { make in
@@ -237,13 +274,12 @@ class PostViewController: UIViewController {
             make.leading.trailing.equalTo(containerView).inset(10)
         }
         
-        tableView.snp.makeConstraints() { make in
+        tableViewNames.snp.makeConstraints() { make in
+            make.height.equalTo(300)
             make.top.equalTo(orbitalLabel.snp.bottom).offset(10)
             make.leading.trailing.equalTo(containerView).inset(10)
             make.bottom.equalTo(containerView.snp.bottom).inset(10)
         }
-        
-        
     }
     
     
@@ -260,31 +296,55 @@ class PostViewController: UIViewController {
         view.backgroundColor = .orange
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-        containerView.addSubviews(statusHeader, statusCodeLabel, headerHeader, htmlHeadersLabel, responseHeader, responseLabel, formatedHeader, formatedLabel, orbitalHeader, orbitalLabel, tableView)
+        containerView.addSubviews(statusHeader, statusCodeLabel, headerHeader, htmlHeadersLabel, responseHeader, responseLabel, formatedHeader, formatedLabel, orbitalHeader, orbitalLabel, tableViewNames)
         if let _ = try? optionalTry() {
             print("No issues")
         } else {
             print("Some error")
         }
         constraintsSetup()
-        
     }
+    
+}
+
+extension PostViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        header.textLabel?.textColor = UIColor.black
+        header.textLabel?.textAlignment = .center
+    }
+    
 }
 
 extension PostViewController: UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let _ = persons else { return 0 }
+        return persons!.count
+    }
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Name: \(NetworkService.dataTask(url: (someObjectForTable?.residents[indexPath.item])!, completionData: nil, completionResponse: nil, completionError: nil))"
-   
-        cell.textLabel?.textAlignment = .left
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        
+        guard let _ = persons else { return UITableViewCell.init(frame: .zero) }
+        
+        cell.textLabel?.text = "№\(indexPath.item + 1) - \(self.persons![indexPath.item].name)"
+        
         return cell
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        objectForTable ?? 0
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        "Residents names"
     }
     
-    
-    
 }
+
+

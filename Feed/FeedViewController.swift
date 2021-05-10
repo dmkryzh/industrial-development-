@@ -56,7 +56,7 @@ class ContainerView: UIView {
     
     let newButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("button1", for: .normal)
+        button.setTitle("JSONSerialization example", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.addTarget(self, action: #selector(navigationToRandomUrl), for: .touchUpInside)
@@ -65,7 +65,7 @@ class ContainerView: UIView {
     
     let secondNewButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("button2", for: .normal)
+        button.setTitle("Codable example", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemRed
         button.addTarget(self, action: #selector(navigationToUrl), for: .touchUpInside)
@@ -74,7 +74,7 @@ class ContainerView: UIView {
     
     let someNewButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("button2", for: .normal)
+        button.setTitle("Decoder with table", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemYellow
         button.addTarget(self, action: #selector(navigationToPlanetUrl), for: .touchUpInside)
@@ -83,7 +83,7 @@ class ContainerView: UIView {
     
     let thirdNewButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("music", for: .normal)
+        button.setTitle("Music", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemPink
         button.addTarget(self, action: #selector(navigationToPlayer), for: .touchUpInside)
@@ -116,7 +116,7 @@ class ContainerView: UIView {
     
     @objc private func navigationToUrl() {
         guard onTap != nil else { return }
-        onTap!(post, URL(string: "https://jsonplaceholder.typicode.com/todos/1"), "simple")
+        onTap!(post, URL(string: "https://jsonplaceholder.typicode.com/todos/1"), "sample")
     }
     
     @objc private func navigationToPlanetUrl() {
@@ -147,7 +147,7 @@ class PostPresenter: FeedViewOutput {
     func showPost(post: Post, url: URL?, object: String?) {
         let postViewController = PostViewController()
         postViewController.randomUrl = url
-        postViewController.object = object
+        postViewController.objectForShow = object
         postViewController.post = post
         navigationController?.pushViewController(postViewController, animated: true)
     }
