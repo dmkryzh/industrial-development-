@@ -10,7 +10,7 @@ import SnapKit
 
 class PhotosHighlightsView: UIView {
     
-    let title: UILabel = {
+    private let title: UILabel = {
         let title = UILabel()
         title.text = "Photos"
         title.textColor = .black
@@ -18,7 +18,7 @@ class PhotosHighlightsView: UIView {
         return title
     }()
     
-    let arrow: UIImageView = {
+    private let arrow: UIImageView = {
         let arrowConfig = UIImage.SymbolConfiguration(textStyle: .title3)
         let arrow = UIImageView()
         arrow.tintColor = .black
@@ -26,7 +26,7 @@ class PhotosHighlightsView: UIView {
         return arrow
     }()
     
-    lazy var viewStack: UIStackView = {
+    private lazy var viewStack: UIStackView = {
         let viewStack = UIStackView()
         for i in 0...3 {
             let imageView = UIImageView()
@@ -44,7 +44,7 @@ class PhotosHighlightsView: UIView {
         return viewStack
     }()
     
-    func setupConstraints() {
+    private func setupConstraints() {
         title.snp.makeConstraints() { make in
             make.top.equalTo(self.snp.top)
             make.leading.equalTo(self.snp.leading)

@@ -12,7 +12,7 @@ class PhotosTableViewCell: UITableViewCell {
     
     var photosHighlights = PhotosHighlightsView()
     
-    func setupConstraints() {
+    private func setupConstraints() {
         photosHighlights.snp.makeConstraints() { make in
             make.top.leading.bottom.trailing.equalTo(contentView).inset(12)
         }

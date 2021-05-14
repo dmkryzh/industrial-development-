@@ -45,8 +45,9 @@ struct NetworkService {
     static func dataTask( url: URL,
                           completionData: ((Data?) -> Void)?,
                           completionResponse: (([String:Any]?, Int) -> Void)?,
-                          completionError: ((String?) -> Void)?) {
-
+                          completionError: ((String?) -> Void)?)
+    {
+        
         let task = sharedSession.dataTask(with: url) { data, response, error in
             
             guard error == nil else {

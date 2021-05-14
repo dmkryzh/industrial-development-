@@ -8,95 +8,7 @@ import SnapKit
 
 class PostViewController: UIViewController {
     
-    let decoder: JSONDecoder = {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        decoder.dateDecodingStrategy = .iso8601
-        return decoder
-    }()
-    
-    var persons: [Person]? {
-        didSet {
-            tableViewNames.reloadData()
-        }
-    }
-    
-    var post: Post? {
-        didSet {
-            title = post?.title
-        }
-    }
-    
-    var objectForShow: String?
-    
-    var objectForTable: Planet? {
-        didSet {
-            objectForTable?.residents.forEach() { resident in
-                NetworkService.dataTask(
-                    url: (URL(string: resident)!),
-                    
-                    completionData: { data in
-                        DispatchQueue.main.async { [self] in
-                            let person = try? decoder.decode(Person.self, from: data!)
-                            
-                            if self.persons != nil {
-                                self.persons?.append(person!)
-                            } else {
-                                self.persons = [person!]
-                            }
-                        }
-                    },
-                    
-                    completionResponse: nil,
-                    
-                    completionError: nil)
-            }
-        }
-    }
-    
-    var randomUrl: URL? {
-        
-        didSet {
-            
-            NetworkService.dataTask(url: randomUrl!,
-                                    
-                                    completionData: { [self] data in
-                                        
-                                        DispatchQueue.main.async {
-                                            
-                                            if objectForShow == "sample" {
-                                                let json = try? NetworkService.toObject(json: data!)
-                                                let user = UserStructure(json: json)
-                                                formatedLabel.text = user?.title
-                                                
-                                            } else if objectForShow == "planet" {
-                                                let planet = try? decoder.decode(Planet.self, from: data!)
-                                                objectForTable = planet
-                                                orbitalLabel.text = planet?.orbitalPeriod
-                                            }
-                                            responseLabel.text = String(data: data!, encoding: .utf8)
-                                            
-                                        }
-                                        
-                                    },
-                                    
-                                    completionResponse: { httpHeaders, httpCode in
-                                        
-                                        DispatchQueue.main.async {
-                                            self.htmlHeadersLabel.text = httpHeaders?.description
-                                            self.statusCodeLabel.text = httpCode.description
-                                        }
-                                    },
-                                    
-                                    completionError: { error in
-                                        DispatchQueue.main.async {
-                                            self.responseLabel.text = error?.debugDescription
-                                        }
-                                    })
-            
-        }
-        
-    }
+    var viewModel: PostViewModel
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -282,27 +194,47 @@ class PostViewController: UIViewController {
         }
     }
     
-    
+    // Сделано для примера работы с EH для try?
     func optionalTry() throws {
-        if let title = self.post?.title, title == "Пост" {
-            print("Author is \(title)")
+        if title == "Пост" {
+            print("Author is \(String(describing: title))")
         } else {
             throw AppErrors.internalError
         }
     }
     
+
+    init(viewModel: PostViewModel) {
+   
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel.reloadData = self
+ 
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .orange
+        title = viewModel.post.title
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
         containerView.addSubviews(statusHeader, statusCodeLabel, headerHeader, htmlHeadersLabel, responseHeader, responseLabel, formatedHeader, formatedLabel, orbitalHeader, orbitalLabel, tableViewNames)
+        
+        
         if let _ = try? optionalTry() {
             print("No issues")
         } else {
             print("Some error")
         }
+        
         constraintsSetup()
+        
+        self.viewModel.udateLabels()
+       
     }
     
 }
@@ -325,8 +257,8 @@ extension PostViewController: UITableViewDelegate {
 extension PostViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let _ = persons else { return 0 }
-        return persons!.count
+        guard let _ = self.viewModel.persons else { return 0 }
+        return self.viewModel.persons!.count
     }
     
     
@@ -334,9 +266,9 @@ extension PostViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
         
-        guard let _ = persons else { return UITableViewCell.init(frame: .zero) }
+        guard let _ = self.viewModel.persons else { return UITableViewCell.init(frame: .zero) }
         
-        cell.textLabel?.text = "№\(indexPath.item + 1) - \(self.persons![indexPath.item].name)"
+        cell.textLabel?.text = "№\(indexPath.item + 1) - \(self.viewModel.persons![indexPath.item].name)"
         
         return cell
     }
@@ -345,6 +277,25 @@ extension PostViewController: UITableViewDataSource {
         "Residents names"
     }
     
+}
+
+extension PostViewController: PostInput {
+    func reloadLabels() {
+        DispatchQueue.main.async { [self] in
+            htmlHeadersLabel.text = viewModel.htmlHeaders
+            orbitalLabel.text = viewModel.orbital
+            statusCodeLabel.text = viewModel.statusCode
+            formatedLabel.text = viewModel.title
+            responseLabel.text = viewModel.response
+        }
+    }
+    
+    func reloadTables() {
+        DispatchQueue.main.async { [self] in
+            self.tableViewNames.reloadData()
+        }
+    }
+
 }
 
 
