@@ -43,39 +43,40 @@ class PostViewModel {
     
     var objectForTable: Planet? {
         didSet {
-       
-            objectForTable?.residents.forEach(){ resident in
-       
-                    NetworkService.dataTask(
-                        url: (URL(string: resident)!),
-                        
-                        completionData: { [self] data in
-                      
-                            let person = try? decoder.decode(Person.self, from: data!)
-                            (persons?.append(person!)) ?? (persons = [person!])
-                            reloadData?.reloadTables()
-                        
-                        },
-                        
-                        completionResponse: { [self] httpHeaders, httpCode in
-                            
-                            htmlHeaders = httpHeaders?.description
-                            statusCode = httpCode.description
-                            reloadData?.reloadLabels()
-                            
-                        },
-                        
-                        completionError: { [self] error in
-                            response = error?.debugDescription
-                        })
-              
-                    
-            
-                }
-     
-            }
+            updateResidentsTable()
         }
+    }
     
+    func updateResidentsTable() {
+        objectForTable?.residents.forEach(){ resident in
+            
+            NetworkService.dataTask(
+                url: (URL(string: resident)!),
+                
+                completionData: { [self] data in
+                    
+                    let person = try? decoder.decode(Person.self, from: data!)
+                    (persons?.append(person!)) ?? (persons = [person!])
+                    reloadData?.reloadTables()
+                    
+                },
+                
+                completionResponse: { [self] httpHeaders, httpCode in
+                    
+                    htmlHeaders = httpHeaders?.description
+                    statusCode = httpCode.description
+                    reloadData?.reloadLabels()
+                    
+                },
+                
+                completionError: { [self] error in
+                    response = error?.debugDescription
+                })
+            
+            
+            
+        }
+    }
     
     func udateLabels() {
         
