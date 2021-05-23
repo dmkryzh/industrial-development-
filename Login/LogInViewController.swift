@@ -12,6 +12,7 @@ import Firebase
 
 class LogInViewController: UIViewController {
     
+    
     var viewModel = LoginViewModel(loginInspector: LoginInspectorViewModelDelegate())
     
     weak var coordinator: LoginCoordinator?
@@ -165,11 +166,11 @@ class LogInViewController: UIViewController {
         let actionOk = UIAlertAction(title: "OK", style: .default) { [self] _ in
             guard let _ = alert.textFields?[0].text else { return }
             viewModel.loginInspector?.createUser(email: alert.textFields![0].text!, password: alert.textFields![1].text!){
-            let alertCreated = UIAlertController(title: "Created", message: "Account is successefully created", preferredStyle: .alert)
-            present(alertCreated, animated: true) {
-                dismiss(animated: true, completion: nil)
-                sleep(3)
-            }
+                let alertCreated = UIAlertController(title: "Created", message: "Account is successefully created", preferredStyle: .alert)
+                present(alertCreated, animated: true) {
+                    dismiss(animated: true, completion: nil)
+                    sleep(3)
+                }
             }
             
             
@@ -248,13 +249,13 @@ class LogInViewController: UIViewController {
         })
     }
     
-        @objc func isFilledRegistrationFields() {
+    @objc func isFilledRegistrationFields() {
         viewModel.didEnterText(login: alert.textFields?[0].text, password: alert.textFields?[1].text, trueCompletion: {
             self.alert.actions[0].isEnabled = true
         }, falseCompletion: {
             self.alert.actions[0].isEnabled = false
         })
-        }
+    }
     
     @objc func navigateTo() {
         guard let _ = coordinator else { return }
@@ -272,15 +273,32 @@ class LogInViewController: UIViewController {
     }
     
     @objc func signInLogic() {
-        viewModel.loginInspector?.signIn(email: login.text ?? "", password: password.text ?? "", completion: nil)
-        self.coordinator!.startProfile()
+        guard let _ = coordinator else { return }
+        viewModel.loginInspector?.signIn(email: login.text ?? "", password: password.text ?? "",
+                                         signInCompletion: { [self] in
+                                            coordinator!.startProfile()
+                                         },
+                                         alertCompletion: { [self] in
+                                            viewModel.loginInspector?.showLoginAlert(email: login.text ?? "", password: password.text ?? "", alertHandler: { alert in
+                                                                    present(alert, animated: true, completion: nil)},
+                                                    successHandler: {
+                                                        present(viewModel.loginInspector!.successAlert, animated: true) {
+                                                            sleep(1)
+                                                            dismiss(animated: true) {
+                                                                guard let _ = coordinator else { return }
+                                                            }
+                                                        }
+                                                    },
+                                                    failureHandler: nil)
+                                         } )
     }
     
     
     @objc func registerUser() {
+        guard let _ = coordinator else { return }
         self.coordinator!.navController.present(alert, animated: true, completion: nil)
     }
-
+    
     // MARK: ViewDidLoad
     
     override func viewDidLoad() {

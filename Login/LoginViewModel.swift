@@ -10,13 +10,14 @@ import Firebase
 import FirebaseAuth
 
 protocol LoginInspectorViewModel {
-    
-    func checkUser()
+
     func createUser(email: String, password: String, completion: (() -> Void)?)
-    func signIn(email: String, password: String, completion: (() -> Void)?)
-    func signOut()
+    func signIn(email: String, password: String, signInCompletion: (() -> Void)?, alertCompletion: (() -> Void)?)
+    func showLoginAlert(email: String, password: String, alertHandler: ((UIAlertController) -> Void)?, successHandler: (() -> Void)?, failureHandler: (()->Void)?)
     func validateLogin(_ login: String) -> Bool
     func validatePassword(_ password: String) -> Bool
+    var successAlert: UIAlertController { get }
+    var failureAlert: UIAlertController { get }
 }
 
 class LoginViewModel {
@@ -88,10 +89,29 @@ class LoginViewModel {
 
 class LoginInspectorViewModelDelegate: LoginInspectorViewModel {
     
-    func checkUser() {
-        //FirebaseAuth.Auth.auth().currentUser
-    }
+    let successAlert = UIAlertController(title: "Success", message: "Account is created", preferredStyle: .alert)
+    let failureAlert = UIAlertController(title: "Passwords don't match", message: "Please try again", preferredStyle: .alert)
     
+    func showLoginAlert(email: String, password: String, alertHandler: ((UIAlertController) -> Void)?, successHandler: (()->Void)?, failureHandler: (()->Void)?) {
+        
+        let loginAlert: UIAlertController = {
+            
+            let alert = UIAlertController(title: "Login error", message: "Acccount with provided credentionals doesn't exist, do you want to crete a new one?", preferredStyle: .alert)
+            
+            let createPassword = UIAlertAction(title: "Create account", style: .default) { [self] _ in
+                createUser(email: email, password: password, completion: successHandler)
+            }
+            
+            let tryAgain = UIAlertAction(title: "Try again", style: .default)
+            alert.addAction(createPassword)
+            alert.addAction(tryAgain)
+            
+            return alert
+        }()
+        
+        alertHandler!(loginAlert)
+    }
+
     func createUser(email: String, password: String, completion: (() -> Void)?) {
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             guard let error = error else {
@@ -104,20 +124,17 @@ class LoginInspectorViewModelDelegate: LoginInspectorViewModel {
         }
     }
     
-    func signIn(email: String, password: String, completion: (() -> Void)?) {
+    func signIn(email: String, password: String, signInCompletion: (() -> Void)?, alertCompletion: (() -> Void)? ) {
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             guard let error = error else {
-                guard let _ = completion else { return }
-                completion!()
+                guard let _ = signInCompletion else { return }
+                signInCompletion!()
                 print(result!)
                 return
             }
-            print(error.localizedDescription)
+            print(error)
+            alertCompletion!()
         }
-    }
-    
-    func signOut() {
-        try? Auth.auth().signOut()
     }
     
     func validateLogin(_ login: String) -> Bool {
