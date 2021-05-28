@@ -22,6 +22,8 @@ class ProfileViewController: UIViewController {
         return header
     }()
     
+    
+    
     lazy var cross: UIImageView = {
         let cross = UIImageView()
         let crossConfig = UIImage.SymbolConfiguration(textStyle: .largeTitle)
@@ -36,7 +38,7 @@ class ProfileViewController: UIViewController {
     
     
     lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView = UITableView()
         tableView.toAutoLayout()
         tableView.delegate = self
         tableView.dataSource = self
@@ -107,7 +109,7 @@ class ProfileViewController: UIViewController {
     @objc func crossTap() {
         
         guard someState == false else { return }
- 
+        
         func animateAvaToInitialSize() {
             
             avaPostition.layer.cornerRadius = 50
@@ -160,7 +162,6 @@ class ProfileViewController: UIViewController {
         view.backgroundColor = .lightGray
         view.addSubviews(tableView, cross)
         setupConstraints()
-
     }
     
     override func viewWillLayoutSubviews() {
@@ -180,7 +181,7 @@ class ProfileViewController: UIViewController {
             grayBackground.snp.remakeConstraints() { make in
                 make.edges.equalToSuperview()
             }
-
+            
         }
     }
     
@@ -194,18 +195,19 @@ class ProfileViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
+    var cellForTap: UITableViewCell?
+    
+    @objc func likeGesture(_ gesture: UITapGestureRecognizer) {
+        gesture.numberOfTapsRequired = 2
+        print("fffffuuuucccck")
+    }
 }
 
 // MARK: UITableViewDelegate
 extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        switch section {
-        case 1:
-            return 16
-        default:
-            return 0
-        }
+        0
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -223,11 +225,11 @@ extension ProfileViewController: UITableViewDelegate {
         guard section == 0 else { return nil }
         return self.header
     }
-    
 }
 
 // MARK: UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -246,6 +248,8 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        
+        
         switch indexPath.section {
         case 0:
             let cellFromPhoto: PhotosTableViewCell = tableView.dequeueReusableCell(withIdentifier: String(describing: PhotosTableViewCell.self), for: indexPath) as! PhotosTableViewCell
@@ -253,10 +257,10 @@ extension ProfileViewController: UITableViewDataSource {
         case 1:
             let cellFromPost: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: String(describing: PostTableViewCell.self), for: indexPath) as! PostTableViewCell
             cellFromPost.post = PostItems.tableStruct[indexPath.row]
+            cellFromPost.likesLabel.isUserInteractionEnabled = true
             return cellFromPost
         default:
             return UITableViewCell(frame: .zero)
         }
     }
-    
 }

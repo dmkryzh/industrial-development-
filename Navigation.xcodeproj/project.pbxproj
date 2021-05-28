@@ -20,6 +20,10 @@
 		50148844264FD93100E73F5F /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50148843264FD93100E73F5F /* LoginViewModel.swift */; };
 		50148846264FDC0400E73F5F /* GenericExtentions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50148845264FDC0400E73F5F /* GenericExtentions.swift */; };
 		501488482651074000E73F5F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 501488472651074000E73F5F /* GoogleService-Info.plist */; };
+		5030D441265E9B360083A9E9 /* FavoriteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5030D440265E9B360083A9E9 /* FavoriteViewController.swift */; };
+		5030D443265E9B440083A9E9 /* FavoriteVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5030D442265E9B440083A9E9 /* FavoriteVM.swift */; };
+		5030D445265E9CBB0083A9E9 /* FavoriteCoordrinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5030D444265E9CBB0083A9E9 /* FavoriteCoordrinator.swift */; };
+		5030D447265E9F1B0083A9E9 /* Queen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 5030D446265E9F1B0083A9E9 /* Queen.mp3 */; };
 		505D1932265B9E95007D4FA1 /* StartAuthorisationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D1931265B9E95007D4FA1 /* StartAuthorisationVC.swift */; };
 		505D1934265B9EB2007D4FA1 /* StartAuthorisationVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D1933265B9EB2007D4FA1 /* StartAuthorisationVM.swift */; };
 		505D1936265BC040007D4FA1 /* MainLoginDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505D1935265BC040007D4FA1 /* MainLoginDB.swift */; };
@@ -37,7 +41,6 @@
 		50BAA7D02643125A0017F418 /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BAA7CF2643125A0017F418 /* NetworkService.swift */; };
 		50E780172628C53700F49E1B /* MusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E780162628C53700F49E1B /* MusicViewController.swift */; };
 		50E7801F2628D82C00F49E1B /* Master.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 50E7801E2628D82C00F49E1B /* Master.mp3 */; };
-		50E780222629B15900F49E1B /* Queen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 50E780212629B15900F49E1B /* Queen.mp3 */; };
 		50E780252629B3B000F49E1B /* Electric.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 50E780242629B3B000F49E1B /* Electric.mp3 */; };
 		50E780282629B49300F49E1B /* Guano.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 50E780272629B49200F49E1B /* Guano.mp3 */; };
 		50E7802B2629B49B00F49E1B /* Alpha.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 50E7802A2629B49B00F49E1B /* Alpha.mp3 */; };
@@ -70,6 +73,10 @@
 		50148843264FD93100E73F5F /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		50148845264FDC0400E73F5F /* GenericExtentions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericExtentions.swift; sourceTree = "<group>"; };
 		501488472651074000E73F5F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5030D440265E9B360083A9E9 /* FavoriteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteViewController.swift; sourceTree = "<group>"; };
+		5030D442265E9B440083A9E9 /* FavoriteVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteVM.swift; sourceTree = "<group>"; };
+		5030D444265E9CBB0083A9E9 /* FavoriteCoordrinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCoordrinator.swift; sourceTree = "<group>"; };
+		5030D446265E9F1B0083A9E9 /* Queen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Queen.mp3; sourceTree = "<group>"; };
 		505D1931265B9E95007D4FA1 /* StartAuthorisationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAuthorisationVC.swift; sourceTree = "<group>"; };
 		505D1933265B9EB2007D4FA1 /* StartAuthorisationVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartAuthorisationVM.swift; sourceTree = "<group>"; };
 		505D1935265BC040007D4FA1 /* MainLoginDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainLoginDB.swift; sourceTree = "<group>"; };
@@ -87,7 +94,6 @@
 		50BAA7CF2643125A0017F418 /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		50E780162628C53700F49E1B /* MusicViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicViewController.swift; sourceTree = "<group>"; };
 		50E7801E2628D82C00F49E1B /* Master.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Master.mp3; path = ../../../../../../Downloads/Master.mp3; sourceTree = "<group>"; };
-		50E780212629B15900F49E1B /* Queen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Queen.mp3; path = "../../../../../10. Мультимедиа/AVFoundation_Audio/AVFoundation_Audio/Music/Queen.mp3"; sourceTree = "<group>"; };
 		50E780242629B3B000F49E1B /* Electric.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Electric.mp3; path = ../../../../../../Downloads/Electric.mp3; sourceTree = "<group>"; };
 		50E780272629B49200F49E1B /* Guano.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Guano.mp3; path = ../../../../../../Downloads/Guano.mp3; sourceTree = "<group>"; };
 		50E7802A2629B49B00F49E1B /* Alpha.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Alpha.mp3; path = ../../../../../../Downloads/Alpha.mp3; sourceTree = "<group>"; };
@@ -121,6 +127,7 @@
 		060782A5250CE27700A87020 = {
 			isa = PBXGroup;
 			children = (
+				5030D43F265E9B1D0083A9E9 /* Favorite */,
 				50BAA7CE2643123C0017F418 /* Network */,
 				060782BA250CE27A00A87020 /* Assets.xcassets */,
 				060782BC250CE27A00A87020 /* LaunchScreen.storyboard */,
@@ -161,6 +168,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5030D43F265E9B1D0083A9E9 /* Favorite */ = {
+			isa = PBXGroup;
+			children = (
+				5030D440265E9B360083A9E9 /* FavoriteViewController.swift */,
+				5030D442265E9B440083A9E9 /* FavoriteVM.swift */,
+			);
+			path = Favorite;
+			sourceTree = "<group>";
+		};
 		50336DA5260392EA00517DDC /* Login */ = {
 			isa = PBXGroup;
 			children = (
@@ -187,6 +203,7 @@
 				505EDD3F26092B4900319C7A /* MainCoordinator.swift */,
 				505EDD4526092C0100319C7A /* ProfileCoordinator.swift */,
 				505EDD4226092BC300319C7A /* FeedCoordinator.swift */,
+				5030D444265E9CBB0083A9E9 /* FavoriteCoordrinator.swift */,
 				505EDD3C26091DAC00319C7A /* Coordinator.swift */,
 				505EDD55260E48BA00319C7A /* LoginCoordinator.swift */,
 			);
@@ -234,7 +251,7 @@
 			children = (
 				50E780242629B3B000F49E1B /* Electric.mp3 */,
 				50E7802A2629B49B00F49E1B /* Alpha.mp3 */,
-				50E780212629B15900F49E1B /* Queen.mp3 */,
+				5030D446265E9F1B0083A9E9 /* Queen.mp3 */,
 				50E780272629B49200F49E1B /* Guano.mp3 */,
 				50E7801E2628D82C00F49E1B /* Master.mp3 */,
 			);
@@ -349,8 +366,8 @@
 				501488482651074000E73F5F /* GoogleService-Info.plist in Resources */,
 				50E780282629B49300F49E1B /* Guano.mp3 in Resources */,
 				060782BE250CE27A00A87020 /* LaunchScreen.storyboard in Resources */,
-				50E780222629B15900F49E1B /* Queen.mp3 in Resources */,
 				50E7802B2629B49B00F49E1B /* Alpha.mp3 in Resources */,
+				5030D447265E9F1B0083A9E9 /* Queen.mp3 in Resources */,
 				060782BB250CE27A00A87020 /* Assets.xcassets in Resources */,
 				50E7801F2628D82C00F49E1B /* Master.mp3 in Resources */,
 			);
@@ -413,6 +430,7 @@
 				506C5E772647D96C00EF7870 /* PostData.swift in Sources */,
 				060782B6250CE27700A87020 /* FeedViewController.swift in Sources */,
 				505EDD56260E48BA00319C7A /* LoginCoordinator.swift in Sources */,
+				5030D441265E9B360083A9E9 /* FavoriteViewController.swift in Sources */,
 				060782B2250CE27700A87020 /* AppDelegate.swift in Sources */,
 				50BAA7D02643125A0017F418 /* NetworkService.swift in Sources */,
 				505D1934265B9EB2007D4FA1 /* StartAuthorisationVM.swift in Sources */,
@@ -420,6 +438,7 @@
 				505EDD4D260A834B00319C7A /* ProfileViewModel.swift in Sources */,
 				E25052AD25B33F4700201617 /* LogInViewController.swift in Sources */,
 				505D1932265B9E95007D4FA1 /* StartAuthorisationVC.swift in Sources */,
+				5030D443265E9B440083A9E9 /* FavoriteVM.swift in Sources */,
 				060782C6250CEB0A00A87020 /* InfoViewController.swift in Sources */,
 				060782CA250CEE7200A87020 /* Post.swift in Sources */,
 				5079DAE32636DE1D00136C52 /* AudioPlayer.swift in Sources */,
@@ -433,6 +452,7 @@
 				50148840264DAACC00E73F5F /* FeedViewModel.swift in Sources */,
 				50148846264FDC0400E73F5F /* GenericExtentions.swift in Sources */,
 				50BAA7CD263F41FC0017F418 /* PhotosViewModel.swift in Sources */,
+				5030D445265E9CBB0083A9E9 /* FavoriteCoordrinator.swift in Sources */,
 				E24BCFEA25B77B08006F7711 /* PostTableViewCell.swift in Sources */,
 				E2AAF97025BDA77F00A30723 /* PhotosCollectionViewCell.swift in Sources */,
 				E2AAF96D25BDA74F00A30723 /* PhotosViewController.swift in Sources */,

@@ -28,11 +28,20 @@ class PostTableViewCell: UITableViewCell {
         return title
     }()
     
-    let likesLabel: UILabel = {
+    lazy var gesture: UITapGestureRecognizer = {
+        let gesture = UITapGestureRecognizer()
+        gesture.addTarget(self, action: #selector(likeTap))
+        gesture.numberOfTapsRequired = 2
+        return gesture
+    }()
+    
+    lazy var likesLabel: UILabel = {
         let likesLabel = UILabel()
         likesLabel.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         likesLabel.textColor = .black
         likesLabel.toAutoLayout()
+        likesLabel.isUserInteractionEnabled = true
+        likesLabel.addGestureRecognizer(gesture)
         return likesLabel
     }()
     
@@ -42,6 +51,14 @@ class PostTableViewCell: UITableViewCell {
         viewsLabel.textColor = .black
         viewsLabel.toAutoLayout()
         return viewsLabel
+    }()
+    
+    let heart: UIImageView = {
+        let image = UIImage(systemName: "heart.fill")
+        let heart = UIImageView(image: image)
+        heart.alpha = 0
+        heart.toAutoLayout()
+        return heart
     }()
     
     let descriptionLabel: UILabel = {
@@ -60,7 +77,17 @@ class PostTableViewCell: UITableViewCell {
         imagePost.contentMode = .scaleAspectFit
         return imagePost
     }()
-    
+   
+    @objc func likeTap() {
+        UIView.animateKeyframes(withDuration: 1, delay: 0, options: .calculationModeCubic, animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5) {
+                self.heart.alpha = 1
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
+                self.heart.alpha = 0
+            }
+        })
+    }
     
     func setupConstraints() {
         let constraints = [
@@ -73,7 +100,7 @@ class PostTableViewCell: UITableViewCell {
             imagePost.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imagePost.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             imagePost.heightAnchor.constraint(equalTo: contentView.widthAnchor),
-        
+            
             descriptionLabel.topAnchor.constraint(equalTo: imagePost.bottomAnchor, constant: 16),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
@@ -82,16 +109,22 @@ class PostTableViewCell: UITableViewCell {
             likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             
+            heart.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
+            heart.centerYAnchor.constraint(equalTo: likesLabel.centerYAnchor),
+            heart.centerXAnchor.constraint(equalTo: likesLabel.centerXAnchor),
+            heart.widthAnchor.constraint(equalToConstant: 40),
+            heart.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            
             viewsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
             viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             viewsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
-            ]
+        ]
         NSLayoutConstraint.activate(constraints)
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubviews(titleLabel, imagePost, descriptionLabel, likesLabel, viewsLabel)
+        contentView.addSubviews(titleLabel, imagePost, descriptionLabel, likesLabel, heart, viewsLabel)
         setupConstraints()
     }
     

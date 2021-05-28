@@ -11,19 +11,5 @@ import UIKit
 
 
 
-class ProfileViewModel {
-    
-    struct PostDataModel {
-        
-    }
-    
-    struct PhotoDataModel {
-        
-    }
-    
-    struct HeaderDataModel {
-        
-    }
-
-    
+class ProfileViewModel {    
 }

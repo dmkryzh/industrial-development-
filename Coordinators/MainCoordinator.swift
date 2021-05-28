@@ -20,14 +20,17 @@ class MainCoordinator: Coordinator  {
     func start() {
         let feedFlow = prepareFeedFlow()
         let loginFlow = prepareLoginFlow()
+        let favoriteFlow = prepareFavoriteFlow()
         
-        rootViewController.viewControllers = [feedFlow, loginFlow]
+        rootViewController.viewControllers = [feedFlow, loginFlow, favoriteFlow]
         
         let feedCoordinator = FeedCoordinator(navigation: feedFlow)
         feedCoordinator.start()
         let loginCoordinator = LoginCoordinator(navigation: loginFlow)
         loginCoordinator.start()
-        childCoordinators = [feedCoordinator, loginCoordinator]
+        let favoriteCoordinator = FavoriteCoordrinator(navigation: favoriteFlow)
+        favoriteCoordinator.start()
+        childCoordinators = [feedCoordinator, loginCoordinator, favoriteCoordinator]
     }
     
     func prepareFeedFlow() -> UINavigationController {
@@ -42,6 +45,14 @@ class MainCoordinator: Coordinator  {
         let loginBarItem = makeTabBarItem(image: UIImage(named: "person"), title: "Profile")
         loginNav.tabBarItem = loginBarItem
         return loginNav
+        
+    }
+    
+    func prepareFavoriteFlow() -> UINavigationController {
+        let favoriteNav = UINavigationController()
+        let favoriteItem = makeTabBarItem(image: UIImage(systemName: "heart"), title: "Favorite")
+        favoriteNav.tabBarItem = favoriteItem
+        return favoriteNav
         
     }
 }

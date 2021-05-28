@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import RealmSwift
 
 enum AppErrors: String, Error {
     case internalError = "Some internal error"
