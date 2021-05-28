@@ -43,22 +43,23 @@ struct NetworkService {
     }
     
     static func dataTask( url: URL,
-                          completionData: @escaping (Data?) -> Void,
-                          completionResponse: @escaping ([String:Any]?, Int) -> Void,
-                          completionError: @escaping (String?) -> Void) {
-
+                          completionData: ((Data?) -> Void)?,
+                          completionResponse: (([String:Any]?, Int) -> Void)?,
+                          completionError: ((String?) -> Void)?)
+    {
+        
         let task = sharedSession.dataTask(with: url) { data, response, error in
             
             guard error == nil else {
-                completionError(error.debugDescription)
+                completionError?(error.debugDescription)
                 return
             }
             
             guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else { return }
-            completionResponse(httpResponse.allHeaderFields as? [String:Any], httpResponse.statusCode)
+            completionResponse?(httpResponse.allHeaderFields as? [String:Any], httpResponse.statusCode)
             
             if let data = data {
-                completionData(data)
+                completionData?(data)
             }
             
         }
@@ -79,12 +80,7 @@ struct NetworkService {
             options: .fragmentsAllowed
         )
     }
-    
-    
 }
-
-
-
 
 class SessionDelegate: NSObject, URLSessionDelegate {
 }

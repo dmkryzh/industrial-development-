@@ -14,23 +14,23 @@ class PhotosViewController: UIViewController {
     
     var viewModel: PhotosViewModel
     
-    lazy var timerLabel: UILabel = {
+    private lazy var timerLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .right
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         return label
     }()
     
-    let layout: UICollectionViewFlowLayout = {
+    private let layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         return layout
     }()
     
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.dataSource = viewModel
-        collectionView.delegate = viewModel
+        collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.register(PhotosCollectionViewCell.self, forCellWithReuseIdentifier: viewModel.collectionIdentifier)
         collectionView.backgroundColor = .white
         return collectionView
@@ -45,14 +45,14 @@ class PhotosViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func useTimer() {
+    private func useTimer() {
         viewModel.toUpdatekWithTimeInterval(timeInterval: 1.0) {
             self.viewModel.timerString(propagateTo: &self.timerLabel.text)
         }
         
     }
     
-    func setupConstraints() {
+    private func setupConstraints() {
         collectionView.snp.makeConstraints() { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -86,3 +86,41 @@ class PhotosViewController: UIViewController {
         
     }
 }
+
+extension PhotosViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        viewModel.numberOfSections
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        viewModel.numberOfItems
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let photo = viewModel.photos[indexPath.item]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: viewModel.collectionIdentifier, for: indexPath) as! PhotosCollectionViewCell
+        cell.imageItem = photo
+        return cell
+    }
+    
+}
+
+extension PhotosViewController: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width: CGFloat = (collectionView.bounds.width - 8 * 4) / 3
+        return CGSize(width: width, height: width)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+        return 8
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+    }
+    
+}
+

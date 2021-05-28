@@ -16,7 +16,7 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    let photo: UIImageView = {
+    private let photo: UIImageView = {
         let photo = UIImageView()
         photo.image = nil
         photo.contentMode = .scaleAspectFill
@@ -24,7 +24,7 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         return photo
     }()
     
-    func setupConstraints() {
+    private func setupConstraints() {
         photo.snp.makeConstraints() { make in
             make.top.leading.bottom.trailing.equalToSuperview()
         }

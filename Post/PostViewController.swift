@@ -8,39 +8,7 @@ import SnapKit
 
 class PostViewController: UIViewController {
     
-    var post: Post? {
-        didSet {
-            title = post?.title
-        }
-    }
-    
-    var url: URL? {
-        
-        didSet {
-            
-            NetworkService.dataTask(url: url!,
-            
-            completionData: { data in
-                DispatchQueue.main.async {
-                    self.responseLabel.text = String(data: data!, encoding: .utf8)
-                    print(try! NetworkService.toObject(json: data!)!)
-                }
-            },
-            completionResponse: { httpHeaders, httpCode in
-                DispatchQueue.main.async {
-                    self.htmlHeadersLabel.text = httpHeaders?.description
-                    self.statusCodeLabel.text = httpCode.description
-                }
-            },
-            completionError: { error in
-                DispatchQueue.main.async {
-                    self.responseLabel.text = error?.debugDescription
-                }
-            })
-            
-        }
-        
-    }
+    var viewModel: PostViewModel
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -80,7 +48,15 @@ class PostViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "Formated response:"
+        label.text = "Title:"
+        return label
+    }()
+    
+    let orbitalHeader: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.textAlignment = .left
+        label.text = "Orbital period:"
         return label
     }()
     
@@ -126,6 +102,27 @@ class PostViewController: UIViewController {
         label.clipsToBounds = true
         label.contentMode = .scaleAspectFill
         return label
+    }()
+    
+    lazy var orbitalLabel: UILabel = {
+        let label = UILabel()
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        label.backgroundColor = .white
+        label.layer.cornerRadius = 5
+        label.clipsToBounds = true
+        label.contentMode = .scaleAspectFill
+        return label
+    }()
+    
+    lazy var tableViewNames: UITableView = {
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cellId")
+        tableView.estimatedRowHeight = UITableView.automaticDimension
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.backgroundColor = .clear
+        return tableView
     }()
     
     lazy var constraintsSetup = { [self] in
@@ -177,31 +174,128 @@ class PostViewController: UIViewController {
         formatedLabel.snp.makeConstraints() { make in
             make.top.equalTo(formatedHeader.snp.bottom).offset(10)
             make.leading.trailing.equalTo(containerView).inset(10)
+        }
+        
+        orbitalHeader.snp.makeConstraints() { make in
+            make.top.equalTo(formatedLabel.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(containerView).inset(10)
+        }
+        
+        orbitalLabel.snp.makeConstraints() { make in
+            make.top.equalTo(orbitalHeader.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(containerView).inset(10)
+        }
+        
+        tableViewNames.snp.makeConstraints() { make in
+            make.height.equalTo(300)
+            make.top.equalTo(orbitalLabel.snp.bottom).offset(10)
+            make.leading.trailing.equalTo(containerView).inset(10)
             make.bottom.equalTo(containerView.snp.bottom).inset(10)
         }
     }
     
-    
+    // Сделано для примера работы с EH для try?
     func optionalTry() throws {
-        if let title = self.post?.title, title == "Пост" {
-            print("Author is \(title)")
+        if title == "Пост" {
+            print("Author is \(String(describing: title))")
         } else {
             throw AppErrors.internalError
         }
     }
     
+
+    init(viewModel: PostViewModel) {
+   
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+        self.viewModel.reloadData = self
+ 
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .orange
+        title = viewModel.post.title
         view.addSubview(scrollView)
         scrollView.addSubview(containerView)
-        containerView.addSubviews(statusHeader, statusCodeLabel, headerHeader, htmlHeadersLabel, responseHeader, responseLabel, formatedHeader, formatedLabel)
+        containerView.addSubviews(statusHeader, statusCodeLabel, headerHeader, htmlHeadersLabel, responseHeader, responseLabel, formatedHeader, formatedLabel, orbitalHeader, orbitalLabel, tableViewNames)
+        
+        
         if let _ = try? optionalTry() {
             print("No issues")
         } else {
             print("Some error")
         }
+        
         constraintsSetup()
         
+        self.viewModel.udateLabels()
+       
     }
+    
 }
+
+extension PostViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        header.textLabel?.textColor = UIColor.black
+        header.textLabel?.textAlignment = .center
+    }
+    
+}
+
+extension PostViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let _ = self.viewModel.persons else { return 0 }
+        return self.viewModel.persons!.count
+    }
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
+        
+        guard let _ = self.viewModel.persons else { return UITableViewCell.init(frame: .zero) }
+        
+        cell.textLabel?.text = "№\(indexPath.item + 1) - \(self.viewModel.persons![indexPath.item].name)"
+        
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        "Residents names"
+    }
+    
+}
+
+extension PostViewController: PostInput {
+    func reloadLabels() {
+        DispatchQueue.main.async { [self] in
+            htmlHeadersLabel.text = viewModel.htmlHeaders
+            orbitalLabel.text = viewModel.orbital
+            statusCodeLabel.text = viewModel.statusCode
+            formatedLabel.text = viewModel.title
+            responseLabel.text = viewModel.response
+        }
+    }
+    
+    func reloadTables() {
+        DispatchQueue.main.async { [self] in
+            self.tableViewNames.reloadData()
+        }
+    }
+
+}
+
+

@@ -3,20 +3,16 @@
 //  Navigation
 //
 //  Created by Dmitrii KRY on 02.05.2021.
-//  Copyright © 2021 Artem Novichkov. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-protocol ViewModelViewDelegate {
+protocol PhotosViewModelDelegate {
+    func updateTimerString(fieldToUpdate: inout String?)
 }
 
-protocol ViewModelInputDelegate {
-    func onTap()
-}
-
-class PhotosViewModel: NSObject, ViewModelViewDelegate {
+class PhotosViewModel {
     
     private class TestResult {
         var property: String
@@ -98,41 +94,3 @@ class PhotosViewModel: NSObject, ViewModelViewDelegate {
     }
     
 }
-
-extension PhotosViewModel: UICollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-       self.numberOfSections
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        self.numberOfItems
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let photo = photos[indexPath.item]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: self.collectionIdentifier, for: indexPath) as! PhotosCollectionViewCell
-        cell.imageItem = photo
-        return cell
-    }
-    
-}
-
-extension PhotosViewModel: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width: CGFloat = (collectionView.bounds.width - 8 * 4) / 3
-        return CGSize(width: width, height: width)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 8
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-    }
-    
-}
-
