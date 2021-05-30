@@ -11,6 +11,7 @@ import SnapKit
 class ProfileViewController: UIViewController {
     
     weak var coordinator: ProfileCoordinator?
+    var viewModel: ProfileViewModel
     
     var someState = true
     
@@ -21,6 +22,8 @@ class ProfileViewController: UIViewController {
         header.avaView.addGestureRecognizer(gesture)
         return header
     }()
+    
+    
     
     lazy var cross: UIImageView = {
         let cross = UIImageView()
@@ -36,7 +39,7 @@ class ProfileViewController: UIViewController {
     
     
     lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .grouped)
+        let tableView = UITableView()
         tableView.toAutoLayout()
         tableView.delegate = self
         tableView.dataSource = self
@@ -107,7 +110,7 @@ class ProfileViewController: UIViewController {
     @objc func crossTap() {
         
         guard someState == false else { return }
- 
+        
         func animateAvaToInitialSize() {
             
             avaPostition.layer.cornerRadius = 50
@@ -138,6 +141,21 @@ class ProfileViewController: UIViewController {
         someState.toggle()
     }
     
+    func didRotationChange() {
+        avaPostition.snp.remakeConstraints() { make in
+            make.center.equalTo(self.view.safeAreaLayoutGuide.snp.center)
+            if self.view.bounds.height > self.view.bounds.width {
+                make.width.height.equalTo(self.view.safeAreaLayoutGuide.snp.width)
+            } else {
+                make.width.height.equalTo(self.view.safeAreaLayoutGuide.snp.height)
+            }
+        }
+        
+        grayBackground.snp.remakeConstraints() { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
     
     
     //MARK: Constraints
@@ -155,32 +173,27 @@ class ProfileViewController: UIViewController {
     
     //MARK: LifeCycle
     
+    init(vm:ProfileViewModel) {
+        viewModel = vm
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
         view.addSubviews(tableView, cross)
         setupConstraints()
-
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
         if !someState {
-            
-            avaPostition.snp.remakeConstraints() { make in
-                make.center.equalTo(self.view.safeAreaLayoutGuide.snp.center)
-                if self.view.bounds.height > self.view.bounds.width {
-                    make.width.height.equalTo(self.view.safeAreaLayoutGuide.snp.width)
-                } else {
-                    make.width.height.equalTo(self.view.safeAreaLayoutGuide.snp.height)
-                }
-            }
-            
-            grayBackground.snp.remakeConstraints() { make in
-                make.edges.equalToSuperview()
-            }
-
+            didRotationChange()
         }
     }
     
@@ -193,19 +206,14 @@ class ProfileViewController: UIViewController {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
-    
+
 }
 
 // MARK: UITableViewDelegate
 extension ProfileViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        switch section {
-        case 1:
-            return 16
-        default:
-            return 0
-        }
+        0
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -223,11 +231,11 @@ extension ProfileViewController: UITableViewDelegate {
         guard section == 0 else { return nil }
         return self.header
     }
-    
 }
 
 // MARK: UITableViewDataSource
 extension ProfileViewController: UITableViewDataSource {
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 2
@@ -246,17 +254,24 @@ extension ProfileViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
+        
+        
         switch indexPath.section {
         case 0:
             let cellFromPhoto: PhotosTableViewCell = tableView.dequeueReusableCell(withIdentifier: String(describing: PhotosTableViewCell.self), for: indexPath) as! PhotosTableViewCell
+            cellFromPhoto.selectionStyle = .none
             return cellFromPhoto
         case 1:
             let cellFromPost: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: String(describing: PostTableViewCell.self), for: indexPath) as! PostTableViewCell
             cellFromPost.post = PostItems.tableStruct[indexPath.row]
+            cellFromPost.likesLabel.isUserInteractionEnabled = true
+            cellFromPost.selectionStyle = .none
+            cellFromPost.closure = { [self] in
+                viewModel.saveLikedPost(PostItems.tableStruct[indexPath.row])
+            }
             return cellFromPost
         default:
             return UITableViewCell(frame: .zero)
         }
     }
-    
 }

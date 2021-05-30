@@ -12,22 +12,27 @@ class MainCoordinator: Coordinator  {
     
     var childCoordinators: [Coordinator] = []
     var rootViewController: UITabBarController
+    var coreData: CoreDataStack
 
-    init(rootViewController: UITabBarController) {
+    init(rootViewController: UITabBarController, coreData: CoreDataStack) {
         self.rootViewController = rootViewController
+        self.coreData = coreData
     }
     
     func start() {
         let feedFlow = prepareFeedFlow()
         let loginFlow = prepareLoginFlow()
+        let favoriteFlow = prepareFavoriteFlow()
         
-        rootViewController.viewControllers = [feedFlow, loginFlow]
+        rootViewController.viewControllers = [feedFlow, loginFlow, favoriteFlow]
         
         let feedCoordinator = FeedCoordinator(navigation: feedFlow)
         feedCoordinator.start()
-        let loginCoordinator = LoginCoordinator(navigation: loginFlow)
+        let loginCoordinator = LoginCoordinator(navigation: loginFlow, coreData: coreData)
         loginCoordinator.start()
-        childCoordinators = [feedCoordinator, loginCoordinator]
+        let favoriteCoordinator = FavoriteCoordrinator(navigation: favoriteFlow, coreData: coreData)
+        favoriteCoordinator.start()
+        childCoordinators = [feedCoordinator, loginCoordinator, favoriteCoordinator]
     }
     
     func prepareFeedFlow() -> UINavigationController {
@@ -42,6 +47,14 @@ class MainCoordinator: Coordinator  {
         let loginBarItem = makeTabBarItem(image: UIImage(named: "person"), title: "Profile")
         loginNav.tabBarItem = loginBarItem
         return loginNav
+        
+    }
+    
+    func prepareFavoriteFlow() -> UINavigationController {
+        let favoriteNav = UINavigationController()
+        let favoriteItem = makeTabBarItem(image: UIImage(systemName: "heart"), title: "Favorite")
+        favoriteNav.tabBarItem = favoriteItem
+        return favoriteNav
         
     }
 }

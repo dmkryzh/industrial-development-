@@ -1,30 +1,29 @@
 //
-//  ProfileCoordinator.swift
+//  c.swift
 //  Navigation
 //
-//  Created by Dmitrii KRY on 22.03.2021.
+//  Created by Dmitrii KRY on 26.05.2021.
+//  Copyright © 2021 Artem Novichkov. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-class ProfileCoordinator: Coordinator {
+class FavoriteCoordrinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
-    weak var parentCoordinator: LoginCoordinator?
     var navController: UINavigationController
     var coreData: CoreDataStack
-
+    
     init(navigation: UINavigationController, coreData: CoreDataStack) {
         navController = navigation
         self.coreData = coreData
     }
     
     func start() {
-        let vm = ProfileViewModel(coreData: coreData)
-        let vc = ProfileViewController(vm: vm)
-        vc.coordinator = self
-        navController.setViewControllers([vc], animated: true)
+        let favVM = FavoriteVM(cd: coreData)
+        let favVC = FavoriteViewController(vm: favVM)
+        navController.pushViewController(favVC, animated: true)
     }
     
     func startPhotos() {

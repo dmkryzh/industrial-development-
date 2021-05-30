@@ -13,17 +13,19 @@ import UIKit
 
 class ProfileViewModel {
     
-    struct PostDataModel {
-        
+    var coreData: CoreDataStack
+    
+    func saveLikedPost(_ post: Post) {
+        coreData.createNewTask(content: post)
     }
     
-    struct PhotoDataModel {
-        
+    func loadLikedPost() -> [PostStorage] {
+        let posts = coreData.fetchTasks()
+        return posts
     }
     
-    struct HeaderDataModel {
-        
+    init(coreData: CoreDataStack) {
+        self.coreData = coreData
     }
-
     
 }

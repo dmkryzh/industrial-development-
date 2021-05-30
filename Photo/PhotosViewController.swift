@@ -10,7 +10,7 @@ import SnapKit
 
 class PhotosViewController: UIViewController {
     
-    weak var coordinator: ProfileCoordinator?
+    weak var coordinator: Coordinator?
     
     var viewModel: PhotosViewModel
     
