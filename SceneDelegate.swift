@@ -6,8 +6,25 @@
 import UIKit
 import Firebase
 import RealmSwift
+import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
+    
+    var coreDataStack = CoreDataStack()
+    
+        // MARK: - Core Data Saving support
+        
+        func saveContext () {
+            let context = coreDataStack.persistentContainer.viewContext
+            if context.hasChanges {
+                do {
+                    try context.save()
+                } catch {
+                    let nserror = error as NSError
+                    fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+                }
+            }
+        }
 
     var window: UIWindow?
     var appCoordinator: MainCoordinator?
@@ -20,14 +37,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         let startController = MainTabBarController()
-        appCoordinator = MainCoordinator(rootViewController: startController)
+        appCoordinator = MainCoordinator(rootViewController: startController, coreData: coreDataStack)
         window?.rootViewController = appCoordinator?.rootViewController
         let appConfiguration = AppConfiguration.optionTwo(URL(string: urls.randomElement()!)!)
         NetworkService.appConf = appConfiguration.returnUrl()
         FirebaseApp.configure()
         window?.makeKeyAndVisible()
         appCoordinator?.start()
-        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

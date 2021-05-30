@@ -12,9 +12,11 @@ class LoginCoordinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
     var navController: UINavigationController
+    var coreData: CoreDataStack
     
-    init(navigation: UINavigationController) {
+    init(navigation: UINavigationController, coreData: CoreDataStack) {
         self.navController = navigation
+        self.coreData = coreData
     }
     
     func start() {
@@ -24,7 +26,7 @@ class LoginCoordinator: Coordinator {
     }
     
     func startProfile() {
-        let profileCoordinator = ProfileCoordinator(navigation: navController)
+        let profileCoordinator = ProfileCoordinator(navigation: navController, coreData: coreData)
         childCoordinators.append(profileCoordinator)
         profileCoordinator.start()
     }

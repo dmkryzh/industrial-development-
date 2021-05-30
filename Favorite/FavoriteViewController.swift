@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SnapKit
+import CoreData
 
 class FavoriteViewController: UIViewController {
     
@@ -32,9 +33,19 @@ class FavoriteViewController: UIViewController {
     }
     
     
+    func createNavBarItems() {
+        let remove = UIBarButtonItem(title: "Delete all", style: .plain, target: self, action: #selector (resetTable))
+        navigationItem.rightBarButtonItem = remove
+    }
+    
+    @objc func resetTable() {
+        viewModel.removeAll()
+    }
+    
     init(vm: FavoriteVM) {
         viewModel = vm
         super.init(nibName: nil, bundle: nil)
+        vm.reload = self
     }
     
     required init?(coder: NSCoder) {
@@ -46,6 +57,7 @@ class FavoriteViewController: UIViewController {
         view.addSubviews(tableView)
         view.backgroundColor = .lightGray
         setupConstraints()
+        createNavBarItems()
     }
 }
 
@@ -56,19 +68,26 @@ extension FavoriteViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        PostItems.tableStruct.count
-        
+        self.viewModel.fetchPosts()
+        guard let _ = viewModel.savePosts else { return 0 }
+        return self.viewModel.savePosts!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        self.viewModel.fetchPosts()
         let cellFromPost: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: String(describing: PostTableViewCell.self), for: indexPath) as! PostTableViewCell
-        cellFromPost.post = PostItems.tableStruct[indexPath.row]
+        cellFromPost.savedPost = self.viewModel.savePosts?[indexPath.item]
         return cellFromPost
     }
     
 }
 
 extension FavoriteViewController: UITableViewDelegate {
+ 
+}
 
+extension FavoriteViewController: FavoriteVmOutput {
+    func reloadData() {
+        tableView.reloadData()
+    }
 }

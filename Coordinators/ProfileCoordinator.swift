@@ -13,13 +13,16 @@ class ProfileCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     weak var parentCoordinator: LoginCoordinator?
     var navController: UINavigationController
+    var coreData: CoreDataStack
 
-    init(navigation: UINavigationController) {
+    init(navigation: UINavigationController, coreData: CoreDataStack) {
         navController = navigation
+        self.coreData = coreData
     }
     
     func start() {
-        let vc = ProfileViewController()
+        let vm = ProfileViewModel(coreData: coreData)
+        let vc = ProfileViewController(vm: vm)
         vc.coordinator = self
         navController.setViewControllers([vc], animated: true)
     }

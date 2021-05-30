@@ -13,13 +13,15 @@ class FavoriteCoordrinator: Coordinator {
     
     var childCoordinators: [Coordinator] = []
     var navController: UINavigationController
+    var coreData: CoreDataStack
     
-    init(navigation: UINavigationController) {
+    init(navigation: UINavigationController, coreData: CoreDataStack) {
         navController = navigation
+        self.coreData = coreData
     }
     
     func start() {
-        let favVM = FavoriteVM()
+        let favVM = FavoriteVM(cd: coreData)
         let favVC = FavoriteViewController(vm: favVM)
         navController.pushViewController(favVC, animated: true)
     }

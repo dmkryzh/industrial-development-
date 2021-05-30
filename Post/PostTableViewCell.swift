@@ -13,11 +13,23 @@ class PostTableViewCell: UITableViewCell {
         didSet {
             titleLabel.text = post?.title
             imagePost.image = UIImage(named: (post?.imageName ?? "default"))
-            likesLabel.text = ("Likes: \(post?.likes ?? 0)")
-            viewsLabel.text = ("Views: \(post?.views ?? 0)")
+            likesLabel.text = ("Likes: \(post?.likes ?? "")")
+            viewsLabel.text = ("Views: \(post?.views ?? "")")
             descriptionLabel.text = post?.description
         }
     }
+    
+    var savedPost: PostStorage? {
+        didSet {
+            titleLabel.text = savedPost?.title
+            imagePost.image = UIImage(named: (savedPost?.image ?? "default"))
+            likesLabel.text = ("Likes: \(savedPost!.likes)")
+            viewsLabel.text = ("Views: \(savedPost!.views)")
+            descriptionLabel.text = savedPost?.postDescription
+        }
+    }
+    
+    var closure: (() -> Void)?
     
     let titleLabel: UILabel = {
         let title = UILabel()
@@ -79,6 +91,8 @@ class PostTableViewCell: UITableViewCell {
     }()
    
     @objc func likeTap() {
+        guard let _ = closure else { return }
+        closure!()
         UIView.animateKeyframes(withDuration: 1, delay: 0, options: .calculationModeCubic, animations: {
             UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5) {
                 self.heart.alpha = 1

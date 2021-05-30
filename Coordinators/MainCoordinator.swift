@@ -12,9 +12,11 @@ class MainCoordinator: Coordinator  {
     
     var childCoordinators: [Coordinator] = []
     var rootViewController: UITabBarController
+    var coreData: CoreDataStack
 
-    init(rootViewController: UITabBarController) {
+    init(rootViewController: UITabBarController, coreData: CoreDataStack) {
         self.rootViewController = rootViewController
+        self.coreData = coreData
     }
     
     func start() {
@@ -26,9 +28,9 @@ class MainCoordinator: Coordinator  {
         
         let feedCoordinator = FeedCoordinator(navigation: feedFlow)
         feedCoordinator.start()
-        let loginCoordinator = LoginCoordinator(navigation: loginFlow)
+        let loginCoordinator = LoginCoordinator(navigation: loginFlow, coreData: coreData)
         loginCoordinator.start()
-        let favoriteCoordinator = FavoriteCoordrinator(navigation: favoriteFlow)
+        let favoriteCoordinator = FavoriteCoordrinator(navigation: favoriteFlow, coreData: coreData)
         favoriteCoordinator.start()
         childCoordinators = [feedCoordinator, loginCoordinator, favoriteCoordinator]
     }
