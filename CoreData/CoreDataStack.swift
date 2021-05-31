@@ -23,13 +23,10 @@ class CoreDataStack {
     var viewContext: NSManagedObjectContext {
         return persistentContainer.viewContext
     }
-
-    var clousure: (() -> Void)?
     
     var backgroundContext: NSManagedObjectContext {
         return persistentContainer.newBackgroundContext()
     }
-    
     
     func fetchTasks() -> [PostStorage] {
         let request: NSFetchRequest<PostStorage> = PostStorage.fetchRequest()
@@ -40,13 +37,14 @@ class CoreDataStack {
         }
     }
     
-    func remove(task: PostStorage) {
+    func remove(task: PostStorage, _ completion: (() -> Void)?) {
         viewContext.delete(task)
         save(context: viewContext)
-        clousure!()
+        guard let _ = completion else { return }
+        completion!()
     }
     
-    func removeAll() {
+    func removeAll(_ completion: @escaping ()->Void) {
         
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "PostStorage")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
@@ -56,8 +54,7 @@ class CoreDataStack {
         } catch {
             fatalError("🤷‍♂️ Что-то пошло не так..")
         }
-        
-        clousure!()
+        completion()
     }
     
     func createNewTask(content: Post) {
@@ -86,8 +83,7 @@ class CoreDataStack {
         guard let userInfo = notification.userInfo else { return }
         
         if let inserts = userInfo[NSInsertedObjectsKey] as? Set<NSManagedObject>, inserts.count > 0 {
-            guard let _ = clousure else { return }
-            clousure!()
+    
         }
         
         if let updates = userInfo[NSUpdatedObjectsKey] as? Set<NSManagedObject>, updates.count > 0 {
