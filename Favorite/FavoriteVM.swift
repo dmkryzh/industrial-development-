@@ -19,10 +19,21 @@ class FavoriteVM {
     
     var savePosts: [PostStorage]?
     
-    func fetchPosts() {
-        savePosts = coreData.fetchTasks()
+    var predicate: String? {
+        didSet {
+            fetchPosts()
+        }
     }
-    
+
+    func fetchPosts() {
+        guard let predicate = self.predicate else {
+            self.savePosts = coreData.fetchTasks()
+            return
+        }
+        let nsPredicate = NSPredicate(format: "%K == %@", #keyPath(PostStorage.author), predicate)
+        self.savePosts = coreData.fetchTasks(nsPredicate)
+    }
+
     func removeAll() {
         coreData.removeAll { [self] in
             fetchPosts()
@@ -35,6 +46,10 @@ class FavoriteVM {
             fetchPosts()
             reloadOutput?.reloadData()
         }
+    }
+    
+    func search(_ element: String) {
+        
     }
     
     init(cd: CoreDataStack) {

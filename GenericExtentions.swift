@@ -3,7 +3,6 @@
 //  Navigation
 //
 //  Created by Dmitrii KRY on 15.05.2021.
-//  Copyright © 2021 Artem Novichkov. All rights reserved.
 //
 
 import Foundation
@@ -43,7 +42,7 @@ extension NSManagedObjectContext {
 
     /// Only performs a save if there are changes to commit.
     /// - Returns: `true` if a save was needed. Otherwise, `false`.
-    @discardableResult public func saveIfNeeded() throws -> Bool {
+    public func saveIfNeeded() throws -> Bool {
         guard hasChanges else { return false }
         try save()
         return true

@@ -18,6 +18,7 @@ extension PostStorage {
     }
 
     @NSManaged public var likes: String
+    @NSManaged public var author: String
     @NSManaged public var views: String
     @NSManaged public var title: String
     @NSManaged public var image: String

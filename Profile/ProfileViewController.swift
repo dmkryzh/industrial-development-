@@ -266,8 +266,8 @@ extension ProfileViewController: UITableViewDataSource {
             cellFromPost.post = PostItems.tableStruct[indexPath.row]
             cellFromPost.likesLabel.isUserInteractionEnabled = true
             cellFromPost.selectionStyle = .none
-            cellFromPost.onSaveLikedPostTap = { [self] in
-                viewModel.saveLikedPost(PostItems.tableStruct[indexPath.row])
+            cellFromPost.onSaveLikedPostTap = { [weak self] in
+                self?.viewModel.saveLikedPost(PostItems.tableStruct[indexPath.row])
             }
             return cellFromPost
         default:

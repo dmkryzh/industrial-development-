@@ -32,10 +32,38 @@ class FavoriteViewController: UIViewController {
         }
     }
     
+    @objc func showFilterAlert() {
+        let alert = UIAlertController(title: "Enter an author name", message: nil, preferredStyle: .alert)
+        let handler = {
+            self.viewModel.predicate = alert.textFields?[0].text
+            self.viewModel.reloadOutput?.reloadData()
+        }
+        let action = UIAlertAction(title: "Apply", style: .default, handler: { _ in
+            handler()
+        })
+        
+        alert.addTextField { text in
+            text.placeholder = "Author"
+        }
+        
+        alert.addAction(action)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func removeFilter() {
+            self.viewModel.predicate = nil
+            self.viewModel.reloadOutput?.reloadData()
+    }
+    
     
     func createNavBarItems() {
         let remove = UIBarButtonItem(title: "Delete all", style: .plain, target: self, action: #selector (resetTable))
         navigationItem.rightBarButtonItem = remove
+        let removeSorting = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector (removeFilter))
+        let addSorting = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector (showFilterAlert))
+        navigationItem.leftBarButtonItems = [addSorting, removeSorting]
+        
     }
     
     @objc func resetTable() {
@@ -58,6 +86,7 @@ class FavoriteViewController: UIViewController {
         view.backgroundColor = .lightGray
         setupConstraints()
         createNavBarItems()
+        viewModel.fetchPosts()
     }
 }
 
@@ -68,13 +97,11 @@ extension FavoriteViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        self.viewModel.fetchPosts()
-        guard let count = viewModel.savePosts?.count else { return 0 }
+        guard let count = self.viewModel.savePosts?.count else { return 0 }
         return count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        self.viewModel.fetchPosts()
         let cellFromPost: PostTableViewCell = tableView.dequeueReusableCell(withIdentifier: String(describing: PostTableViewCell.self), for: indexPath) as! PostTableViewCell
         cellFromPost.savedPost = self.viewModel.savePosts?[indexPath.item]
         return cellFromPost
@@ -91,8 +118,8 @@ extension FavoriteViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let action = UIContextualAction(style: .destructive, title: "Delete") { [self] (action, view, success) in
-            viewModel.deletePost((viewModel.savePosts?[indexPath.item])!)
-            //viewModel.fetchPosts()
+            guard let post = viewModel.savePosts else { return }
+            viewModel.deletePost(post[indexPath.item])
             success(true)
         }
         return UISwipeActionsConfiguration(actions: [action])
@@ -101,6 +128,7 @@ extension FavoriteViewController: UITableViewDelegate {
 
 extension FavoriteViewController: FavoriteVmOutput {
     func reloadData() {
+        self.viewModel.fetchPosts()
         tableView.reloadData()
     }
 }
