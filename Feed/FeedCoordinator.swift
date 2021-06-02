@@ -27,25 +27,25 @@ class FeedCoordinator: Coordinator {
     
     func startNavigationToRandomUrl() {
         
-        let postVm = PostViewModel(post: post, objectToShow: nil, url: NetworkService.appConf!)
-        let postVc = PostViewController(viewModel: postVm)
-        navController.pushViewController(postVc, animated: true)
+        let urlVm = UrlViewModel(post: post, objectToShow: nil, url: NetworkService.appConf!)
+        let urlVc = UrlViewController(viewModel: urlVm)
+        navController.pushViewController(urlVc, animated: true)
         
     }
     
     func startNavigationToUrl() {
 
-        let postVm = PostViewModel(post: post, objectToShow: "sample", url: URL(string: "https://jsonplaceholder.typicode.com/todos/1")!)
-        let postVc = PostViewController(viewModel: postVm)
-        navController.pushViewController(postVc, animated: true)
+        let urlVm = UrlViewModel(post: post, objectToShow: "sample", url: URL(string: "https://jsonplaceholder.typicode.com/todos/1")!)
+        let urlVc = UrlViewController(viewModel: urlVm)
+        navController.pushViewController(urlVc, animated: true)
         
     }
     
     func startNavigationToPlanetUrl() {
 
-        let postVm = PostViewModel(post: post, objectToShow: "planet", url: URL(string: "https://swapi.dev/api/planets/1")!)
-        let postVc = PostViewController(viewModel: postVm)
-        navController.pushViewController(postVc, animated: true)
+        let urlVm = UrlViewModel(post: post, objectToShow: "planet", url: URL(string: "https://swapi.dev/api/planets/1")!)
+        let urlVc = UrlViewController(viewModel: urlVm)
+        navController.pushViewController(urlVc, animated: true)
         
     }
     

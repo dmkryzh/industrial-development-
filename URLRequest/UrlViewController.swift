@@ -1,14 +1,14 @@
 //
-//  PostViewController.swift
+//  UrlViewController.swift
 //  Navigation
 //
 
 import UIKit
 import SnapKit
 
-class PostViewController: UIViewController {
+class UrlViewController: UIViewController {
     
-    var viewModel: PostViewModel
+    var viewModel: UrlViewModel
     
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -204,7 +204,7 @@ class PostViewController: UIViewController {
     }
     
 
-    init(viewModel: PostViewModel) {
+    init(viewModel: UrlViewModel) {
    
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -239,7 +239,7 @@ class PostViewController: UIViewController {
     
 }
 
-extension PostViewController: UITableViewDelegate {
+extension UrlViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
@@ -254,7 +254,7 @@ extension PostViewController: UITableViewDelegate {
     
 }
 
-extension PostViewController: UITableViewDataSource {
+extension UrlViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let _ = self.viewModel.persons else { return 0 }
@@ -279,7 +279,7 @@ extension PostViewController: UITableViewDataSource {
     
 }
 
-extension PostViewController: PostInput {
+extension UrlViewController: PostInput {
     func reloadLabels() {
         DispatchQueue.main.async { [self] in
             htmlHeadersLabel.text = viewModel.htmlHeaders

@@ -1,5 +1,5 @@
 //
-//  PostData.swift
+//  UrlDataModel.swift
 //  Navigation
 //
 //  Created by Dmitrii KRY on 09.05.2021.

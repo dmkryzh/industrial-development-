@@ -1,5 +1,5 @@
 //
-//  PostViewModel.swift
+//  UrlViewModel.swift
 //  Navigation
 //
 //  Created by Dmitrii KRY on 13.05.2021.
@@ -12,7 +12,7 @@ protocol PostInput {
     func reloadTables()
 }
 
-class PostViewModel {
+class UrlViewModel {
     
     let decoder: JSONDecoder = {
         let decoder = JSONDecoder()
