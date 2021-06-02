@@ -109,7 +109,7 @@ extension FavoriteViewController: UITableViewDataSource {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        tableView.reloadData()
+        viewModel.reloadOutput?.reloadData()
     }
     
 }
