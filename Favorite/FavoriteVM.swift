@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 protocol FavoriteVmOutput {
     func reloadData()
@@ -13,11 +14,25 @@ protocol FavoriteVmOutput {
 
 class FavoriteVM {
     
+    lazy var fetchResultsController: NSFetchedResultsController<PostStorage> = {
+        let request: NSFetchRequest<PostStorage> = PostStorage.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "author", ascending: false)]
+        let controller = NSFetchedResultsController(
+            fetchRequest: request,
+            managedObjectContext: context,
+            sectionNameKeyPath: nil,
+            cacheName: nil
+        )
+        return controller
+    }()
+    
     private let coreData: CoreDataStack
     
-    var reloadOutput: FavoriteVmOutput?
+    var context: NSManagedObjectContext {
+        coreData.viewContext
+    }
     
-    var savePosts: [PostStorage]?
+    var reloadOutput: FavoriteVmOutput?
     
     var author: String? {
         didSet {
@@ -26,29 +41,24 @@ class FavoriteVM {
     }
     
     func fetchPosts() {
-        guard let author = self.author else {
-            self.savePosts = coreData.fetchTasks()
+        guard let author = author else {
+            fetchResultsController.fetchRequest.predicate = nil
+            try? fetchResultsController.performFetch()
+            reloadOutput?.reloadData()
             return
         }
         let nsPredicate = NSPredicate(format: "%K == %@", #keyPath(PostStorage.author), author)
-        self.savePosts = coreData.fetchTasks(nsPredicate)
+        fetchResultsController.fetchRequest.predicate = nsPredicate
+        try? fetchResultsController.performFetch()
+        reloadOutput?.reloadData()
     }
     
     func removeAll() {
         coreData.removeAll()
-        fetchPosts()
-        reloadOutput?.reloadData()
-        
     }
     
     func deletePost(_ task: PostStorage) {
         coreData.remove(task: task)
-        fetchPosts()
-        reloadOutput?.reloadData()
-    }
-    
-    func search(_ element: String) {
-        
     }
     
     init(cd: CoreDataStack) {

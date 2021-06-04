@@ -37,11 +37,8 @@ extension UIImage {
     }
 }
 
-
 extension NSManagedObjectContext {
-
     /// Only performs a save if there are changes to commit.
-
     public func saveIfNeeded() throws {
         guard hasChanges else { return }
         try save()

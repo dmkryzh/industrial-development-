@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class PostTableViewCell: UITableViewCell {
     
@@ -104,38 +105,42 @@ class PostTableViewCell: UITableViewCell {
     }
     
     func setupConstraints() {
-        let constraints = [
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            titleLabel.heightAnchor.constraint(equalToConstant: 48),
-            
-            imagePost.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
-            imagePost.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            imagePost.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            imagePost.heightAnchor.constraint(equalTo: contentView.widthAnchor),
-            
-            descriptionLabel.topAnchor.constraint(equalTo: imagePost.bottomAnchor, constant: 16),
-            descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            
-            likesLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
-            likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            
-            heart.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 8),
-            heart.centerYAnchor.constraint(equalTo: likesLabel.centerYAnchor),
-            heart.centerXAnchor.constraint(equalTo: likesLabel.centerXAnchor),
-            heart.widthAnchor.constraint(equalToConstant: 40),
-            heart.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            
-            viewsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 16),
-            viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            viewsLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
-        ]
-        NSLayoutConstraint.activate(constraints)
+        
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(48)
+            make.top.leading.trailing.equalTo(contentView).offset(16)
+        }
+        
+        imagePost.snp.makeConstraints { make in
+            make.height.equalTo(contentView.snp.width)
+            make.leading.trailing.equalTo(contentView)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(contentView).offset(16)
+            make.top.equalTo(imagePost.snp.bottom).offset(16)
+        }
+        
+        likesLabel.snp.makeConstraints { make in
+            make.leading.bottom.equalTo(contentView).offset(16)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(16)
+        }
+        
+        heart.snp.makeConstraints { make in
+            make.top.equalTo(descriptionLabel.snp.bottom)
+            make.bottom.equalTo(contentView).inset(8)
+            make.width.equalTo(45)
+            make.centerX.equalTo(likesLabel.snp.centerX)
+            make.centerY.equalTo(likesLabel.snp.centerY)
+        }
+        
+        viewsLabel.snp.makeConstraints { make in
+            make.trailing.bottom.equalTo(contentView).inset(16)
+            make.top.equalTo(descriptionLabel.snp.bottom).offset(16)
+        }
     }
-    
+   
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubviews(titleLabel, imagePost, descriptionLabel, likesLabel, heart, viewsLabel)

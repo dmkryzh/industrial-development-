@@ -55,6 +55,9 @@ class CoreDataStack {
         } catch {
             fatalError("🤷‍♂️ Что-то пошло не так..")
         }
+        
+        saveContext(context: viewContext)
+        
     }
     
     func createNewTask(content: Post) {
