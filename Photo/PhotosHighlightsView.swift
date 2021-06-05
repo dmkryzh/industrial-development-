@@ -45,6 +45,7 @@ class PhotosHighlightsView: UIView {
     }()
     
     private func setupConstraints() {
+        
         title.snp.makeConstraints() { make in
             make.top.equalTo(self.snp.top)
             make.leading.equalTo(self.snp.leading)
@@ -56,9 +57,9 @@ class PhotosHighlightsView: UIView {
         }
         
         viewStack.snp.makeConstraints() { make in
-            make.height.equalTo(self.snp.width).multipliedBy(0.25).inset((8 * 3 + 12 * 2) / 4)
+            make.height.lessThanOrEqualTo(self.snp.width).multipliedBy(0.25).inset((8 * 3 + 12 * 2) / 4)
             make.top.equalTo(title.snp.bottom).offset(12)
-            make.leading.bottom.trailing.equalTo(self)
+            make.leading.bottom.trailing.equalToSuperview()
         }
         
     }

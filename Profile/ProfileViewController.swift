@@ -49,7 +49,7 @@ class ProfileViewController: UIViewController {
         return tableView
     }()
     
-    //MARK: Анимация
+    //MARK: Анимация - start
     
     var avaPostition = UIView()
     var grayBackground = UIView()

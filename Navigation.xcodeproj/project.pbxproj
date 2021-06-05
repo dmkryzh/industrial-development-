@@ -179,9 +179,9 @@
 		5030D43F265E9B1D0083A9E9 /* Favorite */ = {
 			isa = PBXGroup;
 			children = (
+				5030D444265E9CBB0083A9E9 /* FavoriteCoordrinator.swift */,
 				5030D440265E9B360083A9E9 /* FavoriteViewController.swift */,
 				5030D442265E9B440083A9E9 /* FavoriteVM.swift */,
-				5030D444265E9CBB0083A9E9 /* FavoriteCoordrinator.swift */,
 			);
 			path = Favorite;
 			sourceTree = "<group>";
@@ -234,8 +234,8 @@
 		50BAA7C8263DDBAB0017F418 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				060782B5250CE27700A87020 /* FeedViewController.swift */,
 				505EDD4226092BC300319C7A /* FeedCoordinator.swift */,
+				060782B5250CE27700A87020 /* FeedViewController.swift */,
 				5014883F264DAACC00E73F5F /* FeedViewModel.swift */,
 			);
 			path = Feed;
@@ -302,9 +302,9 @@
 			isa = PBXGroup;
 			children = (
 				505EDD4526092C0100319C7A /* ProfileCoordinator.swift */,
+				505EDD4C260A834B00319C7A /* ProfileViewModel.swift */,
 				E25558282590EA54007CDBFF /* ProfileViewController.swift */,
 				E27CC2DB25B9EFBF008C4C11 /* ProfileHeaderView.swift */,
-				505EDD4C260A834B00319C7A /* ProfileViewModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";

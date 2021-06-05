@@ -79,6 +79,7 @@ class PostTableViewCell: UITableViewCell {
     }()
     
     lazy var imagePost: UIImageView = {
+        let image = UIImage()
         let imagePost = UIImageView()
         imagePost.backgroundColor = .black
         imagePost.contentMode = .scaleAspectFit
@@ -102,17 +103,16 @@ class PostTableViewCell: UITableViewCell {
         
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(48)
-            make.top.leading.trailing.equalToSuperview().offset(16)
+            make.top.leading.trailing.equalToSuperview().inset(16)
         }
         
         imagePost.snp.makeConstraints { make in
-            make.height.equalTo(contentView.snp.width)
-            make.leading.trailing.equalToSuperview()
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.height.width.lessThanOrEqualTo(contentView.snp.width)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.top.equalTo(imagePost.snp.bottom).offset(16)
         }
         
