@@ -141,9 +141,9 @@ class MusicViewController: UIViewController {
 
 extension MusicViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let videoUrl = URL(string: playerDelegate.youTubeList[indexPath.row])!
+        guard let url = URL(string: playerDelegate.youTubeList[indexPath.row]) else { return }
         let web = WebViewController()
-        web.someUrl = videoUrl
+        web.someUrl = url
         navigationController?.pushViewController(web, animated: true)
     }
     

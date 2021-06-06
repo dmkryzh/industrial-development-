@@ -21,7 +21,7 @@ class AudioPlayer {
     
     func prepareAudioPlayer() {
         let url = Bundle.main.url(forResource: songsList[currentSongIndex], withExtension: "mp3")!
-        audioPlayer = try! AVAudioPlayer(contentsOf: url)
+        audioPlayer = try? AVAudioPlayer(contentsOf: url)
         audioPlayer.prepareToPlay()
     }
     
@@ -63,7 +63,7 @@ class AudioPlayer {
             currentSongIndex += 1 % songsList.count
         }
         let url = Bundle.main.url(forResource: songsList[currentSongIndex], withExtension: "mp3")!
-        audioPlayer = try! AVAudioPlayer(contentsOf: url)
+        audioPlayer = try? AVAudioPlayer(contentsOf: url)
         audioPlayer.prepareToPlay()
         audioPlayer.play()
         return songsList[currentSongIndex]

@@ -65,15 +65,15 @@ class StartAuthorisationVC {
     }()
     
     func signIn(_ alertCompletion: (() -> Void)? = nil) {
-        guard let login = loginAlert.textFields![0].text else { return }
-        guard let password = loginAlert.textFields![1].text else { return }
+        guard let login = loginAlert.textFields?[0].text else { return }
+        guard let password = loginAlert.textFields?[1].text else { return }
         guard let alert = alertCompletion else { return }
         viewModel.signIn(email: login, password: password, signInCompletion: nil, alertCompletion: alert)
     }
     
     func creteAccount(_ alertCompletion: (() -> Void)? = nil) {
-        guard let login = loginAlert.textFields![0].text else { return }
-        guard let password = loginAlert.textFields![1].text else { return }
+        guard let login = loginAlert.textFields?[0].text else { return }
+        guard let password = loginAlert.textFields?[1].text else { return }
         guard let alert = alertCompletion else { return }
         viewModel.createUser(email: login, password: password, completion: alert)
     }

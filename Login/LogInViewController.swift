@@ -258,16 +258,15 @@ class LogInViewController: UIViewController {
     }
     
     @objc func navigateTo() {
-        guard let _ = coordinator else { return }
-        
+        guard let coordinator = coordinator else { return }
         viewModel.navigateTo(login: self.login.text, password: self.password.text, trueCompletion: {
-            self.coordinator!.startProfile()
+            coordinator.startProfile()
         },
         falseCompletion: {
             let alert = UIAlertController(title: "Error", message: "Wrong login or\\and password", preferredStyle: .alert)
             let action = UIAlertAction(title: "OK", style: .default)
             alert.addAction(action)
-            self.coordinator!.navController.present(alert, animated: true, completion: nil)
+            coordinator.navController.present(alert, animated: true, completion: nil)
         })
         
     }
@@ -277,10 +276,10 @@ class LogInViewController: UIViewController {
     var failureAlert = UIAlertController(title: "Failure", message: "Either login or passworg is wrong, please try again", preferredStyle: .alert)
     
     @objc func signInLogic() {
-        guard let _ = coordinator else { return }
+        guard let coordinator = coordinator else { return }
         viewModel.loginInspector?.signIn(email: login.text ?? "", password: password.text ?? "",
-                                         signInCompletion: { [self] in
-                                            coordinator!.startProfile()
+                                         signInCompletion: {
+                                            coordinator.startProfile()
                                          },
                                          alertCompletion: { [self] in
                                             viewModel.loginInspector?.showLoginAlert(email: login.text ?? "", password: password.text ?? "", alertHandler: { alert in
@@ -288,9 +287,7 @@ class LogInViewController: UIViewController {
                                                     successHandler: {
                                                         present(successAlert, animated: true) {
                                                             sleep(1)
-                                                            dismiss(animated: true) {
-                                                                guard let _ = coordinator else { return }
-                                                            }
+                                                            dismiss(animated: true)
                                                         }
                                                     },
                                                     failureHandler: nil)
@@ -299,8 +296,8 @@ class LogInViewController: UIViewController {
     
     
     @objc func registerUser() {
-        guard let _ = coordinator else { return }
-        self.coordinator!.navController.present(alert, animated: true, completion: nil)
+        guard let coordinator = coordinator else { return }
+        coordinator.navController.present(alert, animated: true, completion: nil)
     }
     
     // MARK: ViewDidLoad

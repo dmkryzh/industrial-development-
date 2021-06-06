@@ -48,15 +48,16 @@ class UrlViewModel {
     }
     
     func updateResidentsTable() {
-        objectForTable?.residents.forEach(){ resident in
-            
+        
+        objectForTable?.residents.forEach { resident in
+            guard let url = URL(string: resident) else { return }
             NetworkService.dataTask(
-                url: (URL(string: resident)!),
+                url: url,
                 
                 completionData: { [self] data in
-                    
-                    let person = try? decoder.decode(Person.self, from: data!)
-                    (persons?.append(person!)) ?? (persons = [person!])
+                    guard let data = data else { return }
+                    guard let person = try? decoder.decode(Person.self, from: data) else { return }
+                    (persons?.append(person)) ?? (persons = [person])
                     reloadData?.reloadTables()
                     
                 },

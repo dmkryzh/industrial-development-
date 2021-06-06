@@ -81,43 +81,40 @@ class ProfileHeaderView: UIView {
         
         avaContainer.snp.makeConstraints() { make in
             make.height.width.equalTo(100)
-            make.top.equalTo(self.snp.top).offset(16)
-            make.leading.equalTo(self.snp.leading).offset(16)
+            make.top.leading.equalToSuperview().offset(16)
         }
         
         avaView.snp.makeConstraints() { make in
             make.height.width.equalTo(100)
-            make.top.equalTo(self.snp.top).offset(16)
-            make.leading.equalTo(self.snp.leading).offset(16)
+            make.top.leading.equalToSuperview().offset(16)
         }
         
         nameLabel.snp.makeConstraints() { make in
             make.height.equalTo(20)
-            make.top.equalTo(self.snp.top).offset(27)
+            make.top.equalToSuperview().offset(27)
             make.leading.equalTo(avaContainer.snp.trailing).offset(24)
-            make.trailing.equalTo(self.snp.trailing).inset(16)
+            make.trailing.equalToSuperview().inset(16)
         }
         
         statusLabel.snp.makeConstraints() { make in
             make.height.equalTo(20)
             make.top.equalTo(nameLabel.snp.top).offset(27)
             make.leading.equalTo(avaContainer.snp.trailing).offset(24)
-            make.trailing.equalTo(self.snp.trailing).inset(16)
+            make.trailing.equalToSuperview().inset(16)
         }
         
         statusTextField.snp.makeConstraints() { make in
             make.height.equalTo(40)
             make.top.equalTo(avaContainer.snp.bottom).inset(24)
             make.leading.equalTo(avaContainer.snp.trailing).offset(24)
-            make.trailing.equalTo(self.snp.trailing).inset(16)
+            make.trailing.equalToSuperview().inset(16)
         }
         
         statusButton.snp.makeConstraints() { make in
             make.height.equalTo(50)
             make.top.equalTo(avaContainer.snp.bottom).offset(50)
-            make.leading.equalTo(self.snp.leading).offset(16)
-            make.bottom.equalTo(self.snp.bottom).inset(16)
-            make.trailing.equalTo(self.snp.trailing).inset(16)
+            make.leading.equalToSuperview().offset(16)
+            make.bottom.trailing.equalToSuperview().inset(16)
         }
     }
     

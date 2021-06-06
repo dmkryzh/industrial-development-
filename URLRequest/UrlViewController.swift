@@ -234,9 +234,7 @@ class UrlViewController: UIViewController {
         constraintsSetup()
         
         self.viewModel.udateLabels()
-       
     }
-    
 }
 
 extension UrlViewController: UITableViewDelegate {
@@ -257,8 +255,8 @@ extension UrlViewController: UITableViewDelegate {
 extension UrlViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let _ = self.viewModel.persons else { return 0 }
-        return self.viewModel.persons!.count
+        guard let persons = self.viewModel.persons else { return 0 }
+        return persons.count
     }
     
     
@@ -266,9 +264,9 @@ extension UrlViewController: UITableViewDataSource {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "cellId", for: indexPath)
         
-        guard let _ = self.viewModel.persons else { return UITableViewCell.init(frame: .zero) }
+        guard let persons = self.viewModel.persons else { return UITableViewCell.init(frame: .zero) }
         
-        cell.textLabel?.text = "№\(indexPath.item + 1) - \(self.viewModel.persons![indexPath.item].name)"
+        cell.textLabel?.text = "№\(indexPath.item + 1) - \(persons[indexPath.item].name)"
         
         return cell
     }

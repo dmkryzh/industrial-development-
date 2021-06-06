@@ -75,9 +75,10 @@ class LoginViewModel {
     }
     
     func loginCheck(login: String?, password: String?) throws -> Bool {
-        guard let _ = loginInspector else { throw AppErrors.internalError}
-        guard loginInspector!.validateLogin(login!),
-              loginInspector!.validatePassword(password!) else { throw AppErrors.unauthenticated}
+        guard let login = login, let password = password else { throw AppErrors.internalError}
+        guard let loginInspector = loginInspector else { throw AppErrors.internalError}
+        guard loginInspector.validateLogin(login),
+              loginInspector.validatePassword(password) else { throw AppErrors.unauthenticated}
         return true
     }
     
@@ -117,16 +118,16 @@ class LoginInspectorViewModelDelegate: LoginInspectorViewModel {
             
             return alert
         }()
-        
-        alertHandler!(loginAlert)
+        guard let alertHandler = alertHandler else { return }
+        alertHandler(loginAlert)
     }
 
     func createUser(email: String, password: String, completion: (() -> Void)?) {
         Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
             guard let error = error else {
-                guard let _ = completion else { return }
-                completion!()
-                print(result!)
+                guard let completion = completion else { return }
+                completion()
+                print(result as Any)
                 return
             }
             print(error.localizedDescription)
@@ -136,13 +137,14 @@ class LoginInspectorViewModelDelegate: LoginInspectorViewModel {
     func signIn(email: String, password: String, signInCompletion: (() -> Void)?, alertCompletion: (() -> Void)? ) {
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             guard let error = error else {
-                guard let _ = signInCompletion else { return }
-                signInCompletion!()
-                print(result!)
+                guard let signInCompletion = signInCompletion else { return }
+                signInCompletion()
+                print(result as Any)
                 return
             }
             print(error)
-            alertCompletion!()
+            guard let alertCompletion = alertCompletion else { return }
+            alertCompletion()
         }
     }
     

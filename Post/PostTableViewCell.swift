@@ -75,11 +75,11 @@ class PostTableViewCell: UITableViewCell {
         descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         descriptionLabel.textColor = .systemGray
         descriptionLabel.numberOfLines = 0
+        descriptionLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return descriptionLabel
     }()
     
     lazy var imagePost: UIImageView = {
-        let image = UIImage()
         let imagePost = UIImageView()
         imagePost.backgroundColor = .black
         imagePost.contentMode = .scaleAspectFit

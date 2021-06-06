@@ -34,16 +34,16 @@ class FeedCoordinator: Coordinator {
     }
     
     func startNavigationToUrl() {
-
-        let urlVm = UrlViewModel(post: post, objectToShow: "sample", url: URL(string: "https://jsonplaceholder.typicode.com/todos/1")!)
+        guard let url = URL(string: "https://jsonplaceholder.typicode.com/todos/1") else { return }
+        let urlVm = UrlViewModel(post: post, objectToShow: "sample", url: url)
         let urlVc = UrlViewController(viewModel: urlVm)
         navController.pushViewController(urlVc, animated: true)
         
     }
     
     func startNavigationToPlanetUrl() {
-
-        let urlVm = UrlViewModel(post: post, objectToShow: "planet", url: URL(string: "https://swapi.dev/api/planets/1")!)
+        guard let url = URL(string: "https://swapi.dev/api/planets/1") else { return }
+        let urlVm = UrlViewModel(post: post, objectToShow: "planet", url: url)
         let urlVc = UrlViewController(viewModel: urlVm)
         navController.pushViewController(urlVc, animated: true)
         
