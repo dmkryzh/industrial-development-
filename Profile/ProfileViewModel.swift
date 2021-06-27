@@ -13,8 +13,17 @@ import UIKit
 
 class ProfileViewModel {
     
-    let headerDataModel = ProfileHeaderView()
-    let photosDataModel = PhotoSet.photoSet
-    let postsDataModel = [Post]()
+    struct PostDataModel {
+        
+    }
+    
+    struct PhotoDataModel {
+        
+    }
+    
+    struct HeaderDataModel {
+        
+    }
+
     
 }

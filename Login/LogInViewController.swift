@@ -195,20 +195,28 @@ class LogInViewController: UIViewController {
     }
     
     @objc func navigateTo() {
-        if loginCheck() {
-            coordinator?.startFeed()
-        } else {
+        do {
+            let isOK = try loginCheck()
+            if isOK {
+                coordinator?.startFeed()
+            }
+            
+        } catch AppErrors.unauthenticated {
             let alert = UIAlertController(title: "Error", message: "Wrong login or\\and password", preferredStyle: .alert)
             let action = UIAlertAction(title: "OK", style: .default)
             alert.addAction(action)
             present(alert, animated: true, completion: nil)
         }
+        
+        catch  {
+            print("unknow issue")
+        }
     }
     
-    func loginCheck() -> Bool {
-        guard delegate != nil else { return false}
+    func loginCheck() throws -> Bool {
+        guard delegate != nil else { throw AppErrors.internalError}
         guard delegate!.validateLogin(self.login.text ?? ""),
-                delegate!.validatePassword(self.password.text ?? "") else { return false }
+              delegate!.validatePassword(self.password.text ?? "") else { throw AppErrors.unauthenticated}
         return true
     }
     

@@ -13,10 +13,11 @@ class FeedCoordinator: Coordinator {
     var navController: UINavigationController?
     var rootViewController: UIViewController
 
-    init() {
+    init() throws {
         rootViewController = FeedViewController()
         rootViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(named: "house"), tag: 0)
         navController = UINavigationController(rootViewController: rootViewController)
+        guard navController != nil else { throw AppErrors.internalError }
     }
     
     func start() {
