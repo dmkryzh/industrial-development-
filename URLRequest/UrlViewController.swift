@@ -24,7 +24,7 @@ class UrlViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "HTTP status:"
+        label.text = StringsForLocale.httpStatus.localaized
         return label
     }()
     
@@ -32,7 +32,7 @@ class UrlViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "HTTP response:"
+        label.text = StringsForLocale.httpResp.localaized
         return label
     }()
     
@@ -40,7 +40,7 @@ class UrlViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "HTTP headers:"
+        label.text = StringsForLocale.httpHeader.localaized
         return label
     }()
     
@@ -48,7 +48,7 @@ class UrlViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "Title:"
+        label.text = StringsForLocale.httpTitle.localaized
         return label
     }()
     
@@ -56,7 +56,7 @@ class UrlViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         label.textAlignment = .left
-        label.text = "Orbital period:"
+        label.text = StringsForLocale.httpOrbital.localaized
         return label
     }()
     
@@ -272,7 +272,7 @@ extension UrlViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        "Residents names"
+        StringsForLocale.httpResidents.localaized
     }
     
 }

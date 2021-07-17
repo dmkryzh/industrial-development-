@@ -5,3 +5,43 @@
   Created by Dmitrii KRY on 17.07.2021.
 */
 
+"TAB_FEED" = "Feed";
+"TAB_PROFILE" = "Profile";
+"TAB_FAVORITE" = "Favorites";
+"JSON_SER_EXP" = "JSONSerialization example";
+"CODABLE_EXP" = "Codable example";
+"DECODER_EXP" = "Decoder example";
+"MUSIC_EXP" = "Music";
+"HTTP_STATUS" = "HTTP status";
+"HTTP_HEADER" = "HTTP headers";
+"HTTP_RESP" = "HTTP response";
+"HTTP_TITLE" = "Title";
+"HTTP_ORBITAL" = "Orbital period";
+"HTTP_RESIDENTS" = "Residents";
+"PROFILE_STAT_BTT" = "Show status";
+"PROFILE_PHOTOS" = "Photos";
+//"PROFILE_LIKES" = "Likes";
+"PROFILE_VIEWS" = "Views";
+"PHOTO_GAL" = "Photo galery";
+"DELETE_ALL" = "Delete all";
+"ENTER_AUTHOR" = "Add author";
+"APPLY" = "Apply";
+"EMAIL_OR_PHONE" = "Email or phone";
+"PASSWORD" = "Password";
+"SIGN_IN" = "Sign in";
+"PASSWORD_SELECTION" = "Password selection";
+"LOGIN" = "Login";
+"LOGIN_ERROR" = "Authentification error";
+"LOGIN_ERROR_TEXT" = "Either login or passworg is wrong, please try again";
+"CREATE_ACCOUNT" = "Create account";
+"TRY_AGAIN" = "Try again";
+"SUCCESS" = "Success";
+"ACCOUNT_IS_CREATED" = "Account has been created";
+"SIGN_UP" = "Sign up";
+"AUTH" = "Authentification";
+"AUTH_TEXT" = "Please fill login and passworf for authentification";
+"REG" = "Registration";
+"REG_TEXT" = "Please fill login and password";
+"CANCEL" = "Cancel";
+"AUTHOR" = "Author";
+"WAIT" = "Please enter something";

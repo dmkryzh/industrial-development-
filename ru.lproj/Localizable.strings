@@ -5,4 +5,43 @@
   Created by Dmitrii KRY on 17.07.2021.
 */
 
-
+"TAB_FEED" = "Лента";
+"TAB_PROFILE" = "Профиль";
+"TAB_FAVORITE" = "Избранное";
+"JSON_SER_EXP" = "JSONSerialization пример";
+"CODABLE_EXP" = "Codable пример";
+"DECODER_EXP" = "Decoder пример";
+"MUSIC_EXP" = "Музыка";
+"HTTP_STATUS" = "HTTP Статус";
+"HTTP_HEADER" = "HTTP Заголовоки";
+"HTTP_RESP" = "HTTP Ответ";
+"HTTP_TITLE" = "Заголовок";
+"HTTP_ORBITAL" = "Орбитальный период";
+"HTTP_RESIDENTS" = "Жители";
+"PROFILE_STAT_BTT" = "Показать статус";
+"PROFILE_PHOTOS" = "Фотографии";
+//"PROFILE_LIKES" = "Лайки";
+"PROFILE_VIEWS" = "Просмотры";
+"PHOTO_GAL" = "Фото галерея";
+"DELETE_ALL" = "Удалить всё";
+"ENTER_AUTHOR" = "Добавить автора";
+"APPLY" = "Применить";
+"EMAIL_OR_PHONE" = "Почта или телефон";
+"PASSWORD" = "Пароль";
+"SIGN_IN" = "Войти";
+"PASSWORD_SELECTION" = "Подбор пароля";
+"LOGIN" = "Логин";
+"LOGIN_ERROR" = "Ошибка аутентификации";
+"LOGIN_ERROR_TEXT" = "Логин и/или пароль введены неверно";
+"CREATE_ACCOUNT" = "Создать аккаунт";
+"TRY_AGAIN" = "Попробовать снова";
+"SUCCESS" = "Успешно";
+"ACCOUNT_IS_CREATED" = "Аккаунт создан";
+"SIGN_UP" = "Зарегистрироваться";
+"AUTH" = "Аутентификация";
+"AUTH_TEXT" = "Пожалуйста, введите логин и пароль для аутентификации";
+"REG" = "Регистрация";
+"REG_TEXT" = "Пожалуйста, введите логин и пароль";
+"CANCEL" = "Отмена";
+"AUTHOR" = "Автор";
+"WAIT" = "Введите что-нибудь";

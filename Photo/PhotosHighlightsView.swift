@@ -12,7 +12,7 @@ class PhotosHighlightsView: UIView {
     
     private let title: UILabel = {
         let title = UILabel()
-        title.text = "Photos"
+        title.text = StringsForLocale.profilePhotos.localaized
         title.textColor = .black
         title.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         return title

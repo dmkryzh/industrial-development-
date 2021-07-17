@@ -37,14 +37,14 @@ class MainCoordinator: Coordinator  {
     
     func prepareFeedFlow() -> UINavigationController {
         let feedNav = UINavigationController()
-        let feedBarItem = makeTabBarItem( image: UIImage(named: "house"), title: "Feed" )
+        let feedBarItem = makeTabBarItem( image: UIImage(named: "house"), title: StringsForLocale.tabFeed.localaized )
         feedNav.tabBarItem = feedBarItem
         return feedNav
     }
     
     func prepareLoginFlow() -> UINavigationController {
         let loginNav = UINavigationController()
-        let loginBarItem = makeTabBarItem(image: UIImage(named: "person"), title: "Profile")
+        let loginBarItem = makeTabBarItem(image: UIImage(named: "person"), title: StringsForLocale.tabProfile.localaized)
         loginNav.tabBarItem = loginBarItem
         return loginNav
         
@@ -52,7 +52,7 @@ class MainCoordinator: Coordinator  {
     
     func prepareFavoriteFlow() -> UINavigationController {
         let favoriteNav = UINavigationController()
-        let favoriteItem = makeTabBarItem(image: UIImage(systemName: "heart"), title: "Favorite")
+        let favoriteItem = makeTabBarItem(image: UIImage(systemName: "heart"), title: StringsForLocale.tabFavorite.localaized)
         favoriteNav.tabBarItem = favoriteItem
         return favoriteNav
         

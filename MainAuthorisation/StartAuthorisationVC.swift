@@ -11,16 +11,17 @@ import UIKit
 
 class StartAuthorisationVC {
     
+    
+    
     let viewModel = StartAuthorisationVM()
     
-    lazy var successAlert = UIAlertController(title: "Success", message: "Account for \"\(loginAlert.textFields?[0].text ?? "")\" is created", preferredStyle: .alert)
-    
-    var failureAlert = UIAlertController(title: "Failure", message: "Either login or passworg is wrong, please try again", preferredStyle: .alert)
+    lazy var successAlert = UIAlertController(title: StringsForLocale.success.localaized, message: StringsForLocale.accountIsCreated.localaized, preferredStyle: .alert)
+ 
+    lazy var failureAlert = UIAlertController(title: StringsForLocale.loginError.localaized, message: StringsForLocale.loginErrorText.localaized, preferredStyle: .alert)
 
     
     func configureLoginAction(_ action: (() -> Void)?) -> UIAlertAction {
-        
-        let action = UIAlertAction(title: "Sign in", style: .default) { _ in
+        let action = UIAlertAction(title: StringsForLocale.signIn.localaized, style: .default) { _ in
             guard let action = action else { return }
             action()
         }
@@ -28,8 +29,7 @@ class StartAuthorisationVC {
     }
     
     func configureCreateAction(_ action: (() -> Void)?) -> UIAlertAction {
-        
-        let action = UIAlertAction(title: "Sign up", style: .default) { _ in
+        let action = UIAlertAction(title: StringsForLocale.signUp.localaized, style: .default) { _ in
             guard let _ = action else { return }
             action!()
         }
@@ -37,8 +37,7 @@ class StartAuthorisationVC {
     }
     
     lazy var loginAlert: UIAlertController = {
-        
-        let alertCont = UIAlertController(title: "Authentication", message: "Please fill login and password fields for authentication", preferredStyle: .alert)
+        let alertCont = UIAlertController(title: StringsForLocale.auth.localaized, message: StringsForLocale.authText.localaized, preferredStyle: .alert)
         
         alertCont.addTextField() { login in
             login.textColor = .black
@@ -46,7 +45,7 @@ class StartAuthorisationVC {
             login.autocapitalizationType = .none
             login.tintColor = UIColor.init(named: "accentColor")
             login.autocapitalizationType = .none
-            login.placeholder = "Login"
+            login.placeholder = StringsForLocale.login.localaized
             login.textContentType = .password
             login.isSecureTextEntry = true
         }
@@ -57,7 +56,7 @@ class StartAuthorisationVC {
             login.autocapitalizationType = .none
             login.tintColor = UIColor.init(named: "accentColor")
             login.autocapitalizationType = .none
-            login.placeholder = "Password"
+            login.placeholder = StringsForLocale.password.localaized
             login.textContentType = .password
             login.isSecureTextEntry = true
         }
