@@ -35,18 +35,18 @@ class FavoriteViewController: UIViewController {
     }
     
     @objc func showFilterAlert() {
-        let alert = UIAlertController(title: "Enter an author name", message: nil, preferredStyle: .alert)
+        let alert = UIAlertController(title: StringsForLocale.enterAuthor.localaized, message: nil, preferredStyle: .alert)
         let handler = { [ weak self ] in
             guard let self = self else { return }
             self.viewModel.author = alert.textFields?[0].text
         }
         
-        let action = UIAlertAction(title: "Apply", style: .default, handler: { _ in
+        let action = UIAlertAction(title: StringsForLocale.apply.localaized, style: .default, handler: { _ in
             handler()
         })
         
         alert.addTextField { text in
-            text.placeholder = "Author"
+            text.placeholder = StringsForLocale.author.localaized
         }
         
         alert.addAction(action)
@@ -60,7 +60,7 @@ class FavoriteViewController: UIViewController {
     
     
     private func createNavBarItems() {
-        let remove = UIBarButtonItem(title: "Delete all", style: .plain, target: self, action: #selector (resetTable))
+        let remove = UIBarButtonItem(title: StringsForLocale.deleteAll.localaized, style: .plain, target: self, action: #selector (resetTable))
         navigationItem.rightBarButtonItem = remove
         let removeSorting = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector (removeFilter))
         let addSorting = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector (showFilterAlert))

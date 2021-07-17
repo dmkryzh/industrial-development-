@@ -12,8 +12,8 @@ class ProfileHeaderView: UIView {
     
     var someState = false
     
-    private var statusText = "Waiting for something"
-    private var name = "Default Name"
+    private var statusText = StringsForLocale.wait.localaized
+    private var name = "John Wick"
     
     let avaContainer = UIView()
     
@@ -59,7 +59,7 @@ class ProfileHeaderView: UIView {
     lazy var statusButton: UIButton = {
         let statusButton = UIButton(type: .system)
         statusButton.backgroundColor = .systemBlue
-        statusButton.setTitle("Show status", for: .normal)
+        statusButton.setTitle(StringsForLocale.profileStatusButt.localaized, for: .normal)
         statusButton.setTitleColor(.white, for: .normal)
         statusButton.layer.cornerRadius = 14
         statusButton.layer.shadowOffset = CGSize(width: 4, height: 4)

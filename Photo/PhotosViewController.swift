@@ -67,7 +67,7 @@ class PhotosViewController: UIViewController {
     //MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Photo Gallery"
+        title = StringsForLocale.photoGal.localaized
         view.backgroundColor = .white
         view.addSubviews(collectionView, timerLabel)
         setupConstraints()

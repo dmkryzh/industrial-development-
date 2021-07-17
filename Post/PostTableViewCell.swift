@@ -14,8 +14,12 @@ class PostTableViewCell: UITableViewCell {
         didSet {
             titleLabel.text = post?.title
             imagePost.image = UIImage(named: (post?.imageName ?? "default"))
-            likesLabel.text = ("Likes: \(post?.likes ?? "")")
-            viewsLabel.text = ("Views: \(post?.views ?? "")")
+            if let likesCount = Int((post?.likes)!) {
+                likesLabel.text = ("\(String.localizedStringWithFormat(StringsForLocale.profileLikes.localaized, likesCount)): \(post?.likes ?? "")")
+            } else {
+                likesLabel.text = ("\(String.localizedStringWithFormat(StringsForLocale.profileLikes.localaized, 0)): \(post?.likes ?? "")")
+            }
+            viewsLabel.text = ("\(StringsForLocale.profileViews.localaized): \(post?.views ?? "")")
             descriptionLabel.text = post?.description
         }
     }

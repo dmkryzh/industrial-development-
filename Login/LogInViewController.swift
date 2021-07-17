@@ -36,7 +36,7 @@ class LogInViewController: UIViewController {
         login.addInternalPaddings(left: 10, right: 10)
         login.autocapitalizationType = .none
         login.addTarget(self, action: #selector (isFilled), for: .editingChanged)
-        login.placeholder = "Email or phone"
+        login.placeholder = StringsForLocale.emailOrPhone.localaized
         return login
     }()
     
@@ -55,7 +55,7 @@ class LogInViewController: UIViewController {
         password.isSecureTextEntry = true
         password.autocapitalizationType = .none
         password.addInternalPaddings(left: 10, right: 40)
-        password.placeholder = "Password"
+        password.placeholder = StringsForLocale.password.localaized
         password.rightView?.addSubview(activityIndicator)
         password.addTarget(self, action: #selector (isFilled), for: .editingChanged)
         let rightView = password.rightView?.frame.size ?? CGSize.zero
@@ -73,7 +73,7 @@ class LogInViewController: UIViewController {
     
     let logInButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Sign In", for: .normal)
+        button.setTitle(StringsForLocale.signIn.localaized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.setBackgroundImage(UIImage(named: "blue_pixel")?.alpha(1), for: .normal)
@@ -91,7 +91,7 @@ class LogInViewController: UIViewController {
     
     let hackPassword: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Подобрать пароль", for: .normal)
+        button.setTitle(StringsForLocale.passwordSelection.localaized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.setBackgroundImage(UIImage(named: "blue_pixel")?.alpha(1), for: .normal)
@@ -108,7 +108,7 @@ class LogInViewController: UIViewController {
     
     let registerButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Sign Up", for: .normal)
+        button.setTitle(StringsForLocale.signUp.localaized, for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.setBackgroundImage(UIImage(named: "blue_pixel")?.alpha(1), for: .normal)
@@ -138,7 +138,7 @@ class LogInViewController: UIViewController {
     }()
     
     lazy var alert: UIAlertController = {
-        let alert = UIAlertController(title: "Registration", message: "Please fill email and password", preferredStyle: .alert)
+        let alert = UIAlertController(title: StringsForLocale.reg.localaized, message: StringsForLocale.regText.localaized, preferredStyle: .alert)
         alert.addTextField() { login in
             login.textColor = .black
             login.font = UIFont.systemFont(ofSize: 16, weight: .regular)
@@ -146,7 +146,7 @@ class LogInViewController: UIViewController {
             login.tintColor = UIColor.init(named: "accentColor")
             login.addInternalPaddings(left: 10, right: 10)
             login.autocapitalizationType = .none
-            login.placeholder = "Email or phone"
+            login.placeholder = StringsForLocale.emailOrPhone.localaized
             login.addTarget(self, action: #selector(self.isFilledRegistrationFields), for: .editingChanged)
         }
         
@@ -158,14 +158,14 @@ class LogInViewController: UIViewController {
             password.isSecureTextEntry = true
             password.autocapitalizationType = .none
             password.addInternalPaddings(left: 10, right: 40)
-            password.placeholder = "Password"
+            password.placeholder = StringsForLocale.password.localaized
             password.addTarget(self, action: #selector(self.isFilledRegistrationFields), for: .editingChanged)
         }
         
         let actionOk = UIAlertAction(title: "OK", style: .default) { [self] _ in
             guard let _ = alert.textFields?[0].text else { return }
             viewModel.createUser(email: alert.textFields![0].text!, password: alert.textFields![1].text!){
-                let alertCreated = UIAlertController(title: "Created", message: "Account is successefully created", preferredStyle: .alert)
+                let alertCreated = UIAlertController(title: StringsForLocale.success.localaized, message: StringsForLocale.accountIsCreated.localaized, preferredStyle: .alert)
                 present(alertCreated, animated: true) {
                     dismiss(animated: true, completion: nil)
                     sleep(3)
@@ -174,7 +174,7 @@ class LogInViewController: UIViewController {
             
             
         }
-        let actionCancel = UIAlertAction(title: "Cancel", style: .default)
+        let actionCancel = UIAlertAction(title: StringsForLocale.cancel.localaized, style: .default)
         actionOk.isEnabled = false
         alert.addAction(actionOk)
         alert.addAction(actionCancel)
