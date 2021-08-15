@@ -189,13 +189,12 @@ class LogInViewController: UIViewController {
     lazy var biometricId: UIButton = {
  
         let view = UIButton.init(type: .system)
-        switch biometric.contet.biometryType.rawValue {
-        case 0:
+        
+        switch biometric.context.biometryType {
+        case .faceID:
             view.setBackgroundImage(UIImage(systemName: "faceid"), for: .normal)
-        case 1:
+        case .touchID:
             view.setBackgroundImage(UIImage(systemName: "touchid"), for: .normal)
-        case 2:
-            break
         default:
             view.setBackgroundImage(UIImage(systemName: "questionmark.square.dashed"), for: .normal)
         }
@@ -262,18 +261,10 @@ class LogInViewController: UIViewController {
     
     @objc func checkBiometric() {
         
-        biometric.authorizeIfPossible { isPossible in
-            if isPossible {
-                let alert = UIAlertController(title: "Success", message: "Successfully Authenticated", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: .cancel) { action in
-                    self.coordinator?.startProfile()
-                }
-                
-                )
-                
-                self.present(alert, animated: true, completion: nil)
-                
-            }
+        biometric.authorizeIfPossible { [weak self] isPossible in
+            guard let self = self else { return }
+            
+            if isPossible { self.coordinator?.startProfile() }
         }
     }
     
