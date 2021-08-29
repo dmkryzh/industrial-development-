@@ -17,6 +17,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let urls = ["https://swapi.dev/api/people/8",
                 "https://swapi.dev/api/starships/3",
                 "https://swapi.dev/api/planets/5"]
+    let notifications = LocalNotificationsService()
+    
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
@@ -28,6 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let appConfiguration = AppConfiguration.optionTwo(URL(string: urls.randomElement()!)!)
         NetworkService.appConf = appConfiguration.returnUrl()
         FirebaseApp.configure()
+        notifications.registerForPushNotifications()
         window?.makeKeyAndVisible()
         appCoordinator?.start()
     }
@@ -40,8 +43,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        // Called when the scene has moved from an inactive state to an active state.
-        // Use this method to restart any tasks that were paused (or not yet started) when the scene was inactive.
+        UIApplication.shared.applicationIconBadgeNumber = 0
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
